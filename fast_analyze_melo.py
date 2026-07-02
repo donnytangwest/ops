@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parent
 ORDER_FILE = ROOT / "近30天出库订单.xlsx"
 INVENTORY_FILE = ROOT / "美西库存数据.xlsx"
 INBOUND_FILE = ROOT / "近30天入库数据.xlsx"
-OUT_DIR = ROOT / "site"
+OUT_DIR = ROOT / "melo"
 OUT_JSON = OUT_DIR / "melo_analysis.json"
 
 NS = {

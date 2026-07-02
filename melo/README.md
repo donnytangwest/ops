@@ -4,8 +4,8 @@
 
 ## 内容
 
-- `site/`：可直接发布的静态展示页面
-- `fast_analyze_melo.py`：从本地业务数据生成 `site/melo_analysis.json` 的分析脚本
+- `melo/`：可直接发布的静态展示页面
+- `fast_analyze_melo.py`：从本地业务数据生成 `melo/melo_analysis.json` 的分析脚本
 - `inspect_workbooks.py`：Excel 字段结构探测脚本
 
 ## 数据口径

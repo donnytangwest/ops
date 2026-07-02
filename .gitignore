@@ -7,4 +7,4 @@ __pycache__/
 .DS_Store
 
 # Keep generated site assets tracked explicitly.
-!site/melo_analysis.json
+!melo/melo_analysis.json
