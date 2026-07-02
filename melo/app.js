@@ -1,5 +1,7 @@
 const fmt = new Intl.NumberFormat("zh-CN");
 const pct = (part, total) => total ? `${(part / total * 100).toFixed(1)}%` : "0%";
+const ACCESS_HASH = "8b871155d3003ffd714cd01e64b9557df781b3e67241edd17bfe47eee622acd9";
+const AUTH_KEY = "melo_access_granted";
 
 function shortRoute(name) {
   return name
@@ -134,9 +136,52 @@ function render(data) {
     .join("");
 }
 
-fetch("./melo_analysis.json")
-  .then(res => res.json())
-  .then(render)
-  .catch(err => {
-    document.body.insertAdjacentHTML("beforeend", `<pre>${err.message}</pre>`);
+async function sha256(text) {
+  const bytes = new TextEncoder().encode(text);
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  return Array.from(new Uint8Array(digest))
+    .map(byte => byte.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+function unlock() {
+  document.body.classList.remove("locked");
+  loadDashboard();
+}
+
+function loadDashboard() {
+  fetch("./melo_analysis.json")
+    .then(res => res.json())
+    .then(render)
+    .catch(err => {
+      document.body.insertAdjacentHTML("beforeend", `<pre>${err.message}</pre>`);
+    });
+}
+
+function initAuth() {
+  const form = document.getElementById("authForm");
+  const input = document.getElementById("accessPassword");
+  const error = document.getElementById("authError");
+
+  if (sessionStorage.getItem(AUTH_KEY) === "true") {
+    unlock();
+    return;
+  }
+
+  input?.focus();
+  form?.addEventListener("submit", async event => {
+    event.preventDefault();
+    error.textContent = "";
+    const hash = await sha256(input.value);
+    if (hash === ACCESS_HASH) {
+      sessionStorage.setItem(AUTH_KEY, "true");
+      input.value = "";
+      unlock();
+      return;
+    }
+    error.textContent = "密码不正确，请重新输入。";
+    input.select();
   });
+}
+
+initAuth();

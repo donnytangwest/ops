@@ -6,7 +6,21 @@
     <title>Melo 集中仓库区与作业流设计</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
-  <body>
+  <body class="locked">
+    <section class="auth-screen" id="authScreen" aria-label="访问验证">
+      <form class="auth-card" id="authForm">
+        <p class="eyebrow auth-eyebrow">MLW01 · Melo 集中仓设计</p>
+        <h2>请输入访问密码</h2>
+        <p class="auth-copy">该页面包含客户业务画像、库存与库区设计内容，仅限授权访问。</p>
+        <label for="accessPassword">访问密码</label>
+        <div class="auth-row">
+          <input id="accessPassword" name="accessPassword" type="password" autocomplete="current-password" />
+          <button type="submit">进入</button>
+        </div>
+        <div class="auth-error" id="authError" role="alert"></div>
+      </form>
+    </section>
+
     <header class="topbar">
       <div>
         <p class="eyebrow">MLW01 · 集中仓设计稿</p>
