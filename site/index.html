@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Melo 集中仓库区与作业流设计</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">MLW01 · 集中仓设计稿</p>
+        <h1>Melo 集中仓库区与作业流程方案</h1>
+      </div>
+      <div class="source">
+        <span>数据源</span>
+        <strong>30天出库订单 · 美西库存 · SOP页面</strong>
+      </div>
+    </header>
+
+    <main>
+      <section class="summary-band">
+        <div class="metric-grid" id="metricGrid"></div>
+      </section>
+
+      <section class="plan-reference">
+        <div class="plan-copy">
+          <div class="section-title">
+            <span>面积口径</span>
+            <strong>截图区域即 12,000㎡ 集中作业边界</strong>
+          </div>
+          <p>
+            本方案后续平面图按这张截图的完整区域作为 Melo 客户可用面积，不再从图内二次切分 30%。
+            黄色区域为现有初始作业设想，左侧货架/托盘位与下方 Dock 作业带需要围绕 Alpha、Beta、Gamma 与入库上架重新组织。
+          </p>
+          <div class="plan-facts">
+            <div><b>12,000㎡</b><span>规划面积</span></div>
+            <div><b>6个托盘位</b><span>图中已标注参考</span></div>
+            <div><b>Dock侧</b><span>适合出入库缓冲</span></div>
+          </div>
+        </div>
+        <figure class="plan-image">
+          <img src="./assets/melo-12000sqm-initial-plan.png" alt="Melo 12000平方米初始仓库平面图" />
+          <figcaption>初始仓库平面截图，后续平面设计以整张图为 12,000㎡ 范围。</figcaption>
+        </figure>
+      </section>
+
+      <section class="content-grid two">
+        <div class="panel">
+          <div class="section-title">
+            <span>业务判断</span>
+            <strong>为什么不能只做播种墙</strong>
+          </div>
+          <div id="diagnosis" class="diagnosis-list"></div>
+        </div>
+        <div class="panel">
+          <div class="section-title">
+            <span>三通道流量</span>
+            <strong>按 SOP 阈值重算</strong>
+          </div>
+          <div id="routeBars" class="bars"></div>
+          <div class="route-note">Alpha + Beta 是集中仓的主流量，Gamma 只承接复杂订单。</div>
+        </div>
+      </section>
+
+      <section class="content-grid two">
+        <div class="panel">
+          <div class="section-title">
+            <span>入库吞吐</span>
+            <strong>收货与上架压力</strong>
+          </div>
+          <div id="inboundCards" class="inbound-cards"></div>
+          <div class="section-title minor">
+            <span>入库节奏</span>
+            <strong>按收货完成日</strong>
+          </div>
+          <div id="inboundChart" class="daily-chart inbound-chart"></div>
+        </div>
+        <div class="panel">
+          <div class="section-title">
+            <span>入库 SKU</span>
+            <strong>收货量 Top 候选</strong>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>SKU</th>
+                  <th>入库件数</th>
+                  <th>行数</th>
+                </tr>
+              </thead>
+              <tbody id="inboundSkuRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="layout-band">
+        <div class="section-title wide">
+          <span>库区设计</span>
+          <strong>从 Dock 到后备区的集中仓布局</strong>
+        </div>
+        <div class="warehouse-map">
+          <div class="dock">DOCK / 出库口</div>
+          <div class="zone zone-r">
+            <b>R 收货缓冲区</b>
+            <span>入库 Dock · 柜号 staging</span>
+          </div>
+          <div class="zone zone-a">
+            <b>A 爆款前置整托区</b>
+            <span>Top SKU · Alpha 快道</span>
+          </div>
+          <div class="zone zone-b">
+            <b>B 单品多件工作站</b>
+            <span>Beta 双人工位</span>
+          </div>
+          <div class="zone zone-c">
+            <b>C 多品播种区</b>
+            <span>4-6 面开放式播种墙</span>
+          </div>
+          <div class="zone zone-d">
+            <b>D 大件/异常区</b>
+            <span>地面画格 · 缺货破损</span>
+          </div>
+          <div class="zone zone-e">
+            <b>E 包材与压缩区</b>
+            <span>5 种包材 · 7天安全库存</span>
+          </div>
+          <div class="zone zone-f">
+            <b>F 出库分拨暂存</b>
+            <span>按承运商 lane 分堆</span>
+          </div>
+          <div class="reserve">后备整托库存 / 高位货架 / 补货通道</div>
+        </div>
+        <div id="zoneCards" class="zone-cards"></div>
+      </section>
+
+      <section class="content-grid two">
+        <div class="panel">
+          <div class="section-title">
+            <span>作业流程</span>
+            <strong>订单池到装车</strong>
+          </div>
+          <div id="processFlow" class="process-flow"></div>
+        </div>
+        <div class="panel">
+          <div class="section-title">
+            <span>人员配置</span>
+            <strong>按通道布人</strong>
+          </div>
+          <div id="staffing" class="staffing"></div>
+        </div>
+      </section>
+
+      <section class="content-grid two">
+        <div class="panel">
+          <div class="section-title">
+            <span>Top SKU</span>
+            <strong>前置区候选</strong>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>SKU</th>
+                  <th>30天件数</th>
+                  <th>日均</th>
+                  <th>库存天数</th>
+                  <th>族群</th>
+                </tr>
+              </thead>
+              <tbody id="topSkuRows"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="section-title">
+            <span>货品结构</span>
+            <strong>库存 SKU 族群</strong>
+          </div>
+          <div id="familyBars" class="bars compact"></div>
+          <div class="section-title minor">
+            <span>高频组合</span>
+            <strong>可转 Beta 的 AB 组合</strong>
+          </div>
+          <div id="comboList" class="combo-list"></div>
+        </div>
+      </section>
+
+      <section class="content-grid two">
+        <div class="panel">
+          <div class="section-title">
+            <span>日订单波动</span>
+            <strong>30天趋势</strong>
+          </div>
+          <div id="dailyChart" class="daily-chart"></div>
+        </div>
+        <div class="panel">
+          <div class="section-title">
+            <span>订单结构</span>
+            <strong>每天不同订单类型</strong>
+          </div>
+          <div class="stack-legend">
+            <span><i class="legend-one"></i>单品单件</span>
+            <span><i class="legend-two"></i>单品多件</span>
+            <span><i class="legend-three"></i>多品多件</span>
+          </div>
+          <div id="structureStack" class="stack-chart"></div>
+        </div>
+      </section>
+
+      <section class="content-grid two">
+        <div class="panel risk">
+          <div class="section-title">
+            <span>待确认</span>
+            <strong>落地前必须补齐</strong>
+          </div>
+          <div id="openQuestions" class="questions"></div>
+        </div>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

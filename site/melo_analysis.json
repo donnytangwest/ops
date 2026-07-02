@@ -1,0 +1,1928 @@
+{
+  "sop": {
+    "source_url": "https://ops.wpop.us/projects/melo-sop",
+    "sop_date": "2026-06-29",
+    "customer": "MLW01",
+    "current_warehouse": "WPLA16",
+    "future_warehouse_assumption": "集中到一个仓库后，按 LA18 / 新集中仓落地设计",
+    "thresholds": {
+      "hot_sku_daily_units": 30,
+      "beta_daily_orders": 10,
+      "gamma_wave_orders": 50,
+      "alpha_uph": "120-150 件/人/小时"
+    }
+  },
+  "inventory": {
+    "totals": {
+      "skus": 261,
+      "qty": 1684846,
+      "pallets": 10458.0,
+      "locations": 843,
+      "volume": 21045.628392668783,
+      "recent_7_out": 163163,
+      "recent_60_out": 916973,
+      "recent_60_in": 1507112
+    },
+    "family_counter": {
+      "中枕头/床品": 138,
+      "大枕头/大抱枕": 37,
+      "平面件/垫类": 69,
+      "小件/轻抛": 17
+    },
+    "storage_counter": {
+      "地堆-floor": 165,
+      "大货架-big": 68,
+      "小货架-small": 27,
+      "散货大货架-big-split": 1
+    },
+    "top_inventory": [
+      {
+        "sku": "MLW01-860013804466",
+        "warehouse": "WPLA16",
+        "qty": 221496,
+        "pallets": 856.0,
+        "locations": 31,
+        "volume": 1744.281,
+        "length": 35.0,
+        "width": 15.0,
+        "height": 15.0,
+        "weight": 2.0,
+        "family": "中枕头/床品",
+        "storage": "地堆-floor",
+        "recent_7_out": 17651,
+        "recent_60_out": 123895,
+        "recent_60_in": 205416,
+        "max_age": 63
+      },
+      {
+        "sku": "MLW01-198715148442",
+        "warehouse": "WPLA16",
+        "qty": 142513,
+        "pallets": 786.0,
+        "locations": 17,
+        "volume": 1603.27125,
+        "length": 50.0,
+        "width": 15.0,
+        "height": 15.0,
+        "weight": 1.0,
+        "family": "中枕头/床品",
+        "storage": "地堆-floor",
+        "recent_7_out": 787,
+        "recent_60_out": 28112,
+        "recent_60_in": 0,
+        "max_age": 126
+      },
+      {
+        "sku": "MLW01-860014330421",
+        "warehouse": "WPLA16",
+        "qty": 116143,
+        "pallets": 79.0,
+        "locations": 14,
+        "volume": 160.27734,
+        "length": 23.0,
+        "width": 20.0,
+        "height": 3.0,
+        "weight": 0.14,
+        "family": "平面件/垫类",
+        "storage": "地堆-floor",
+        "recent_7_out": 8863,
+        "recent_60_out": 36224,
+        "recent_60_in": 6100,
+        "max_age": 126
+      },
+      {
+        "sku": "MLW01-850078340139",
+        "warehouse": "WPLA16",
+        "qty": 48576,
+        "pallets": 351.0,
+        "locations": 14,
+        "volume": 715.961664,
+        "length": 51.0,
+        "width": 17.0,
+        "height": 17.0,
+        "weight": 1.71,
+        "family": "中枕头/床品",
+        "storage": "地堆-floor",
+        "recent_7_out": 435,
+        "recent_60_out": 15175,
+        "recent_60_in": 0,
+        "max_age": 120
+      },
+      {
+        "sku": "MLW01-850078340528",
+        "warehouse": "WPLA16",
+        "qty": 44434,
+        "pallets": 300.0,
+        "locations": 14,
+        "volume": 611.6399534918,
+        "length": 35.56,
+        "width": 30.48,
+        "height": 12.7,
+        "weight": 1.496855,
+        "family": "中枕头/床品",
+        "storage": "地堆-floor",
+        "recent_7_out": 4592,
+        "recent_60_out": 29719,
+        "recent_60_in": 74153,
+        "max_age": 28
+      },
+      {
+        "sku": "MLW01-860014330490",
+        "warehouse": "WPLA18",
+        "qty": 42224,
+        "pallets": 988.0,
+        "locations": 5,
+        "volume": 2014.0848,
+        "length": 53.0,
+        "width": 30.0,
+        "height": 30.0,
+        "weight": 5.31,
+        "family": "大枕头/大抱枕",
+        "storage": "地堆-floor",
+        "recent_7_out": 0,
+        "recent_60_out": 0,
+        "recent_60_in": 0,
+        "max_age": 127
+      },
+      {
+        "sku": "MLW01-860014330438",
+        "warehouse": "WPLA16",
+        "qty": 41776,
+        "pallets": 162.0,
+        "locations": 14,
+        "volume": 328.986,
+        "length": 35.0,
+        "width": 15.0,
+        "height": 15.0,
+        "weight": 2.1,
+        "family": "中枕头/床品",
+        "storage": "地堆-floor",
+        "recent_7_out": 2409,
+        "recent_60_out": 42169,
+        "recent_60_in": 61308,
+        "max_age": 49
+      },
+      {
+        "sku": "MLW01-850078340115",
+        "warehouse": "WPLA16",
+        "qty": 38361,
+        "pallets": 236.0,
+        "locations": 12,
+        "volume": 481.200384,
+        "length": 49.0,
+        "width": 16.0,
+        "height": 16.0,
+        "weight": 1.6,
+        "family": "中枕头/床品",
+        "storage": "地堆-floor",
+        "recent_7_out": 139,
+        "recent_60_out": 5033,
+        "recent_60_in": 2244,
+        "max_age": 90
+      },
+      {
+        "sku": "MLW01-860013804466",
+        "warehouse": "WPLA18",
+        "qty": 28080,
+        "pallets": 109.0,
+        "locations": 1,
+        "volume": 221.13,
+        "length": 35.0,
+        "width": 15.0,
+        "height": 15.0,
+        "weight": 2.0,
+        "family": "中枕头/床品",
+        "storage": "地堆-floor",
+        "recent_7_out": 0,
+        "recent_60_out": 0,
+        "recent_60_in": 0,
+        "max_age": 56
+      },
+      {
+        "sku": "MLW01-850078340528",
+        "warehouse": "WPLA18",
+        "qty": 27490,
+        "pallets": 186.0,
+        "locations": 2,
+        "volume": 378.4035270624,
+        "length": 35.56,
+        "width": 30.48,
+        "height": 12.7,
+        "weight": 1.496855,
+        "family": "中枕头/床品",
+        "storage": "地堆-floor",
+        "recent_7_out": 0,
+        "recent_60_out": 0,
+        "recent_60_in": 27490,
+        "max_age": 7
+      },
+      {
+        "sku": "MLW01-850078340122",
+        "warehouse": "WPLA16",
+        "qty": 25637,
+        "pallets": 19.0,
+        "locations": 5,
+        "volume": 36.994191,
+        "length": 37.0,
+        "width": 6.5,
+        "height": 6.0,
+        "weight": 2.08,
+        "family": "中枕头/床品",
+        "storage": "地堆-floor",
+        "recent_7_out": 55,
+        "recent_60_out": 2775,
+        "recent_60_in": 23868,
+        "max_age": 63
+      },
+      {
+        "sku": "MLW01-860014330483",
+        "warehouse": "WPLA18",
+        "qty": 23296,
+        "pallets": 526.0,
+        "locations": 4,
+        "volume": 1071.8506507304,
+        "length": 54.86,
+        "width": 28.96,
+        "height": 28.96,
+        "weight": 4.808,
+        "family": "大枕头/大抱枕",
+        "storage": "地堆-floor",
+        "recent_7_out": 0,
+        "recent_60_out": 0,
+        "recent_60_in": 0,
+        "max_age": 133
+      },
+      {
+        "sku": "MLW01-850078340221",
+        "warehouse": "WPLA16",
+        "qty": 20090,
+        "pallets": 100.0,
+        "locations": 13,
+        "volume": 202.5072,
+        "length": 48.0,
+        "width": 15.0,
+        "height": 14.0,
+        "weight": 2.0,
+        "family": "中枕头/床品",
+        "storage": "地堆-floor",
+        "recent_7_out": 75,
+        "recent_60_out": 5789,
+        "recent_60_in": 0,
+        "max_age": 91
+      },
+      {
+        "sku": "MLW01-850078340504",
+        "warehouse": "WPLA16",
+        "qty": 19452,
+        "pallets": 4.0,
+        "locations": 3,
+        "volume": 6.263544,
+        "length": 14.0,
+        "width": 11.5,
+        "height": 2.0,
+        "weight": 0.03,
+        "family": "平面件/垫类",
+        "storage": "大货架-big",
+        "recent_7_out": 46,
+        "recent_60_out": 198,
+        "recent_60_in": 0,
+        "max_age": 111
+      },
+      {
+        "sku": "MLW01-850078340511",
+        "warehouse": "WPLA16",
+        "qty": 19098,
+        "pallets": 16.0,
+        "locations": 16,
+        "volume": 32.5478554202,
+        "length": 20.32,
+        "width": 16.51,
+        "height": 5.08,
+        "weight": 0.317515,
+        "family": "小件/轻抛",
+        "storage": "地堆-floor",
+        "recent_7_out": 12367,
+        "recent_60_out": 38941,
+        "recent_60_in": 41472,
+        "max_age": 49
+      }
+    ],
+    "top_volume": [
+      {
+        "sku": "MLW01-860014330490",
+        "warehouse": "WPLA18",
+        "qty": 42224,
+        "pallets": 988.0,
+        "locations": 5,
+        "volume": 2014.0848,
+        "length": 53.0,
+        "width": 30.0,
+        "height": 30.0,
+        "weight": 5.31,
+        "family": "大枕头/大抱枕",
+        "storage": "地堆-floor",
+        "recent_7_out": 0,
+        "recent_60_out": 0,
+        "recent_60_in": 0,
+        "max_age": 127
+      },
+      {
+        "sku": "MLW01-860013804466",
+        "warehouse": "WPLA16",
+        "qty": 221496,
+        "pallets": 856.0,
+        "locations": 31,
+        "volume": 1744.281,
+        "length": 35.0,
+        "width": 15.0,
+        "height": 15.0,
+        "weight": 2.0,
+        "family": "中枕头/床品",
+        "storage": "地堆-floor",
+        "recent_7_out": 17651,
+        "recent_60_out": 123895,
+        "recent_60_in": 205416,
+        "max_age": 63
+      },
+      {
+        "sku": "MLW01-198715148442",
+        "warehouse": "WPLA16",
+        "qty": 142513,
+        "pallets": 786.0,
+        "locations": 17,
+        "volume": 1603.27125,
+        "length": 50.0,
+        "width": 15.0,
+        "height": 15.0,
+        "weight": 1.0,
+        "family": "中枕头/床品",
+        "storage": "地堆-floor",
+        "recent_7_out": 787,
+        "recent_60_out": 28112,
+        "recent_60_in": 0,
+        "max_age": 126
+      },
+      {
+        "sku": "MLW01-860014330483",
+        "warehouse": "WPLA18",
+        "qty": 23296,
+        "pallets": 526.0,
+        "locations": 4,
+        "volume": 1071.8506507304,
+        "length": 54.86,
+        "width": 28.96,
+        "height": 28.96,
+        "weight": 4.808,
+        "family": "大枕头/大抱枕",
+        "storage": "地堆-floor",
+        "recent_7_out": 0,
+        "recent_60_out": 0,
+        "recent_60_in": 0,
+        "max_age": 133
+      },
+      {
+        "sku": "MLW01-860014330490",
+        "warehouse": "WPLA16",
+        "qty": 15415,
+        "pallets": 361.0,
+        "locations": 3,
+        "volume": 735.2955,
+        "length": 53.0,
+        "width": 30.0,
+        "height": 30.0,
+        "weight": 5.31,
+        "family": "大枕头/大抱枕",
+        "storage": "地堆-floor",
+        "recent_7_out": 1238,
+        "recent_60_out": 25128,
+        "recent_60_in": 0,
+        "max_age": 127
+      },
+      {
+        "sku": "MLW01-850078340139",
+        "warehouse": "WPLA16",
+        "qty": 48576,
+        "pallets": 351.0,
+        "locations": 14,
+        "volume": 715.961664,
+        "length": 51.0,
+        "width": 17.0,
+        "height": 17.0,
+        "weight": 1.71,
+        "family": "中枕头/床品",
+        "storage": "地堆-floor",
+        "recent_7_out": 435,
+        "recent_60_out": 15175,
+        "recent_60_in": 0,
+        "max_age": 120
+      },
+      {
+        "sku": "MLW01-860014330483",
+        "warehouse": "WPLA16",
+        "qty": 14015,
+        "pallets": 317.0,
+        "locations": 3,
+        "volume": 644.8311671526,
+        "length": 54.86,
+        "width": 28.96,
+        "height": 28.96,
+        "weight": 4.808,
+        "family": "大枕头/大抱枕",
+        "storage": "地堆-floor",
+        "recent_7_out": 1241,
+        "recent_60_out": 14741,
+        "recent_60_in": 0,
+        "max_age": 133
+      },
+      {
+        "sku": "MLW01-850078340528",
+        "warehouse": "WPLA16",
+        "qty": 44434,
+        "pallets": 300.0,
+        "locations": 14,
+        "volume": 611.6399534918,
+        "length": 35.56,
+        "width": 30.48,
+        "height": 12.7,
+        "weight": 1.496855,
+        "family": "中枕头/床品",
+        "storage": "地堆-floor",
+        "recent_7_out": 4592,
+        "recent_60_out": 29719,
+        "recent_60_in": 74153,
+        "max_age": 28
+      },
+      {
+        "sku": "MLW01-850078340115",
+        "warehouse": "WPLA16",
+        "qty": 38361,
+        "pallets": 236.0,
+        "locations": 12,
+        "volume": 481.200384,
+        "length": 49.0,
+        "width": 16.0,
+        "height": 16.0,
+        "weight": 1.6,
+        "family": "中枕头/床品",
+        "storage": "地堆-floor",
+        "recent_7_out": 139,
+        "recent_60_out": 5033,
+        "recent_60_in": 2244,
+        "max_age": 90
+      },
+      {
+        "sku": "MLW01-850078340405",
+        "warehouse": "WPLA18",
+        "qty": 9167,
+        "pallets": 206.0,
+        "locations": 2,
+        "volume": 419.18619258,
+        "length": 54.0,
+        "width": 29.1,
+        "height": 29.1,
+        "weight": 5.35,
+        "family": "大枕头/大抱枕",
+        "storage": "地堆-floor",
+        "recent_7_out": 0,
+        "recent_60_out": 0,
+        "recent_60_in": 847,
+        "max_age": 55
+      },
+      {
+        "sku": "MLW01-850078340528",
+        "warehouse": "WPLA18",
+        "qty": 27490,
+        "pallets": 186.0,
+        "locations": 2,
+        "volume": 378.4035270624,
+        "length": 35.56,
+        "width": 30.48,
+        "height": 12.7,
+        "weight": 1.496855,
+        "family": "中枕头/床品",
+        "storage": "地堆-floor",
+        "recent_7_out": 0,
+        "recent_60_out": 0,
+        "recent_60_in": 27490,
+        "max_age": 7
+      },
+      {
+        "sku": "MLW01-850078340344",
+        "warehouse": "WPLA16",
+        "qty": 8069,
+        "pallets": 183.0,
+        "locations": 17,
+        "volume": 373.231595,
+        "length": 55.0,
+        "width": 29.0,
+        "height": 29.0,
+        "weight": 5.4,
+        "family": "大枕头/大抱枕",
+        "storage": "地堆-floor",
+        "recent_7_out": 164,
+        "recent_60_out": 5488,
+        "recent_60_in": 18756,
+        "max_age": 40
+      },
+      {
+        "sku": "MLW01-850078340405",
+        "warehouse": "WPLA16",
+        "qty": 7481,
+        "pallets": 168.0,
+        "locations": 2,
+        "volume": 342.08922294,
+        "length": 54.0,
+        "width": 29.1,
+        "height": 29.1,
+        "weight": 5.35,
+        "family": "大枕头/大抱枕",
+        "storage": "地堆-floor",
+        "recent_7_out": 1704,
+        "recent_60_out": 13277,
+        "recent_60_in": 15731,
+        "max_age": 62
+      },
+      {
+        "sku": "MLW01-860014330438",
+        "warehouse": "WPLA16",
+        "qty": 41776,
+        "pallets": 162.0,
+        "locations": 14,
+        "volume": 328.986,
+        "length": 35.0,
+        "width": 15.0,
+        "height": 15.0,
+        "weight": 2.1,
+        "family": "中枕头/床品",
+        "storage": "地堆-floor",
+        "recent_7_out": 2409,
+        "recent_60_out": 42169,
+        "recent_60_in": 61308,
+        "max_age": 49
+      },
+      {
+        "sku": "MLW01-850078340399",
+        "warehouse": "WPLA18",
+        "qty": 5720,
+        "pallets": 146.0,
+        "locations": 2,
+        "volume": 296.9493312614,
+        "length": 55.88,
+        "width": 30.48,
+        "height": 30.48,
+        "weight": 4.953229,
+        "family": "大枕头/大抱枕",
+        "storage": "地堆-floor",
+        "recent_7_out": 0,
+        "recent_60_out": 0,
+        "recent_60_in": 520,
+        "max_age": 51
+      }
+    ],
+    "dimension_summary": {
+      "max_side_p90_cm": 53.0,
+      "max_age_p90_days": 110,
+      "locations_p90": 7
+    }
+  },
+  "inbound": {
+    "totals": {
+      "lines": 679,
+      "expected_qty": 831901,
+      "received_qty": 824192,
+      "putaway_qty": 824192,
+      "forecast_volume": 9433.544860527403,
+      "mixed_qty": 0,
+      "unpacking_qty": 0,
+      "receiving_orders": 175,
+      "containers": 142
+    },
+    "warehouses": [
+      [
+        "WPLA16",
+        626
+      ],
+      [
+        "WPLA18",
+        53
+      ]
+    ],
+    "status_receiving": [
+      [
+        "收货完成",
+        679
+      ]
+    ],
+    "status_putaway": [
+      [
+        "上架完成",
+        679
+      ]
+    ],
+    "daily_received": [
+      {
+        "date": "2026-05-29",
+        "qty": 1579
+      },
+      {
+        "date": "2026-06-01",
+        "qty": 45920
+      },
+      {
+        "date": "2026-06-02",
+        "qty": 41212
+      },
+      {
+        "date": "2026-06-03",
+        "qty": 31331
+      },
+      {
+        "date": "2026-06-04",
+        "qty": 52957
+      },
+      {
+        "date": "2026-06-05",
+        "qty": 76893
+      },
+      {
+        "date": "2026-06-06",
+        "qty": 32429
+      },
+      {
+        "date": "2026-06-08",
+        "qty": 42886
+      },
+      {
+        "date": "2026-06-09",
+        "qty": 43824
+      },
+      {
+        "date": "2026-06-10",
+        "qty": 38123
+      },
+      {
+        "date": "2026-06-11",
+        "qty": 37027
+      },
+      {
+        "date": "2026-06-12",
+        "qty": 28835
+      },
+      {
+        "date": "2026-06-15",
+        "qty": 21126
+      },
+      {
+        "date": "2026-06-16",
+        "qty": 28670
+      },
+      {
+        "date": "2026-06-17",
+        "qty": 31125
+      },
+      {
+        "date": "2026-06-18",
+        "qty": 27843
+      },
+      {
+        "date": "2026-06-19",
+        "qty": 13561
+      },
+      {
+        "date": "2026-06-22",
+        "qty": 16025
+      },
+      {
+        "date": "2026-06-23",
+        "qty": 38111
+      },
+      {
+        "date": "2026-06-24",
+        "qty": 54764
+      },
+      {
+        "date": "2026-06-25",
+        "qty": 54998
+      },
+      {
+        "date": "2026-06-26",
+        "qty": 15510
+      },
+      {
+        "date": "2026-06-29",
+        "qty": 18227
+      },
+      {
+        "date": "2026-06-30",
+        "qty": 14714
+      },
+      {
+        "date": "2026-07-01",
+        "qty": 16502
+      }
+    ],
+    "daily_arrival": [
+      {
+        "date": "2026-05-20",
+        "qty": 143
+      },
+      {
+        "date": "2026-05-29",
+        "qty": 11282
+      },
+      {
+        "date": "2026-06-01",
+        "qty": 51511
+      },
+      {
+        "date": "2026-06-02",
+        "qty": 62541
+      },
+      {
+        "date": "2026-06-03",
+        "qty": 39363
+      },
+      {
+        "date": "2026-06-04",
+        "qty": 69983
+      },
+      {
+        "date": "2026-06-05",
+        "qty": 91999
+      },
+      {
+        "date": "2026-06-06",
+        "qty": 27497
+      },
+      {
+        "date": "2026-06-08",
+        "qty": 13030
+      },
+      {
+        "date": "2026-06-09",
+        "qty": 21299
+      },
+      {
+        "date": "2026-06-10",
+        "qty": 30416
+      },
+      {
+        "date": "2026-06-11",
+        "qty": 30238
+      },
+      {
+        "date": "2026-06-12",
+        "qty": 38902
+      },
+      {
+        "date": "2026-06-15",
+        "qty": 20688
+      },
+      {
+        "date": "2026-06-16",
+        "qty": 28292
+      },
+      {
+        "date": "2026-06-17",
+        "qty": 16755
+      },
+      {
+        "date": "2026-06-18",
+        "qty": 41390
+      },
+      {
+        "date": "2026-06-19",
+        "qty": 12
+      },
+      {
+        "date": "2026-06-22",
+        "qty": 86970
+      },
+      {
+        "date": "2026-06-23",
+        "qty": 34800
+      },
+      {
+        "date": "2026-06-24",
+        "qty": 35778
+      },
+      {
+        "date": "2026-06-25",
+        "qty": 21860
+      },
+      {
+        "date": "2026-06-29",
+        "qty": 42455
+      },
+      {
+        "date": "2026-06-30",
+        "qty": 6984
+      },
+      {
+        "date": "2026-07-01",
+        "qty": 4
+      }
+    ],
+    "top_skus": [
+      {
+        "sku": "MLW01-850078340528",
+        "received_qty": 72773,
+        "lines": 27
+      },
+      {
+        "sku": "MLW01-850078340863",
+        "received_qty": 49680,
+        "lines": 22
+      },
+      {
+        "sku": "MLW01-860013804466",
+        "received_qty": 27264,
+        "lines": 7
+      },
+      {
+        "sku": "MLW01-810218040640",
+        "received_qty": 25540,
+        "lines": 14
+      },
+      {
+        "sku": "MLW01-810218040657",
+        "received_qty": 21750,
+        "lines": 11
+      },
+      {
+        "sku": "MLW01-860014330452",
+        "received_qty": 18000,
+        "lines": 6
+      },
+      {
+        "sku": "MLW01-850078340511",
+        "received_qty": 17856,
+        "lines": 8
+      },
+      {
+        "sku": "MLW01-850078340856",
+        "received_qty": 16944,
+        "lines": 16
+      },
+      {
+        "sku": "MLW01-810218040572",
+        "received_qty": 15184,
+        "lines": 5
+      },
+      {
+        "sku": "MLW01-810218040701",
+        "received_qty": 13936,
+        "lines": 3
+      },
+      {
+        "sku": "MLW01-850078340818",
+        "received_qty": 13824,
+        "lines": 4
+      },
+      {
+        "sku": "MLW01-810218040558",
+        "received_qty": 12584,
+        "lines": 6
+      },
+      {
+        "sku": "MLW01-850078340771",
+        "received_qty": 11496,
+        "lines": 2
+      },
+      {
+        "sku": "MLW01-810218041272",
+        "received_qty": 10680,
+        "lines": 6
+      },
+      {
+        "sku": "MLW01-850078340849",
+        "received_qty": 10000,
+        "lines": 3
+      }
+    ],
+    "stats": {
+      "arrival_to_unload_p50_h": 2.19,
+      "unload_to_receive_p50_h": 3.71,
+      "receive_to_putaway_p50_h": 0,
+      "arrival_to_putaway_p50_h": 14.94,
+      "arrival_to_putaway_p90_h": 66.77,
+      "avg_daily_received_qty": 32968
+    }
+  },
+  "orders": {
+    "totals": {
+      "orders": 227638,
+      "units": 328251,
+      "sku_lines": 266316
+    },
+    "route_orders": {
+      "Alpha 单品单件快道": 146764,
+      "Beta 单品多件工作站": 43957,
+      "Gamma 播种墙": 36917
+    },
+    "route_units": {
+      "Alpha 单品单件快道": 146764,
+      "Beta 单品多件工作站": 89449,
+      "Gamma 播种墙": 92038
+    },
+    "route_daily_avg_orders": {
+      "Alpha 单品单件快道": 4734.3,
+      "Beta 单品多件工作站": 1465.2,
+      "Gamma 播种墙": 1190.9
+    },
+    "picking_type": [
+      [
+        "一票一件",
+        146764
+      ],
+      [
+        "一票一件多个",
+        47134
+      ],
+      [
+        "一票多件",
+        33740
+      ]
+    ],
+    "channel_orders": [
+      [
+        "TOC",
+        227638
+      ]
+    ],
+    "top_platforms": [
+      [
+        "SHOPIFY",
+        226190
+      ],
+      [
+        "TIKTOK",
+        1355
+      ],
+      [
+        "未知",
+        51
+      ],
+      [
+        "Giddyup",
+        39
+      ],
+      [
+        "WALMART",
+        3
+      ]
+    ],
+    "top_carriers": [
+      [
+        "US_AMAZON_GROUND_MLW",
+        167707
+      ],
+      [
+        "US_UNIUNI",
+        47760
+      ],
+      [
+        "US_USPS_GA",
+        7007
+      ],
+      [
+        "US_AMAZON_GROUND",
+        4154
+      ],
+      [
+        "US_FEDEX_GROUND",
+        721
+      ],
+      [
+        "US_FEDEX_2DAY",
+        147
+      ],
+      [
+        "US_UPS_GROUND",
+        115
+      ],
+      [
+        "OFFLINE",
+        25
+      ],
+      [
+        "SELF_PICKUP_USPS",
+        2
+      ]
+    ],
+    "top_states": [
+      [
+        "CA",
+        22833
+      ],
+      [
+        "TX",
+        22760
+      ],
+      [
+        "FL",
+        17874
+      ],
+      [
+        "NY",
+        11587
+      ],
+      [
+        "PA",
+        8193
+      ],
+      [
+        "IL",
+        7646
+      ],
+      [
+        "NC",
+        7505
+      ],
+      [
+        "GA",
+        7470
+      ],
+      [
+        "OH",
+        7352
+      ],
+      [
+        "NJ",
+        6430
+      ],
+      [
+        "VA",
+        5902
+      ],
+      [
+        "MI",
+        5791
+      ],
+      [
+        "TN",
+        5789
+      ],
+      [
+        "AZ",
+        5408
+      ],
+      [
+        "CO",
+        4891
+      ]
+    ],
+    "packaging": [
+      [
+        "未推荐",
+        153450
+      ],
+      [
+        "BCWL-260422-0001",
+        54746
+      ],
+      [
+        "BCWL-260422-0002",
+        15016
+      ],
+      [
+        "BCWL-260422-0004",
+        3085
+      ],
+      [
+        "BCWL-260422-0003",
+        1341
+      ]
+    ],
+    "warehouses": [
+      [
+        "WPLA16",
+        222791
+      ],
+      [
+        "WPLA18",
+        4847
+      ]
+    ],
+    "daily": [
+      {
+        "date": "2026-06-02",
+        "orders": 10036,
+        "units": 14978
+      },
+      {
+        "date": "2026-06-03",
+        "orders": 11764,
+        "units": 15521
+      },
+      {
+        "date": "2026-06-04",
+        "orders": 5983,
+        "units": 8722
+      },
+      {
+        "date": "2026-06-05",
+        "orders": 8617,
+        "units": 12483
+      },
+      {
+        "date": "2026-06-06",
+        "orders": 9204,
+        "units": 13590
+      },
+      {
+        "date": "2026-06-07",
+        "orders": 6214,
+        "units": 9114
+      },
+      {
+        "date": "2026-06-08",
+        "orders": 6032,
+        "units": 9420
+      },
+      {
+        "date": "2026-06-09",
+        "orders": 8171,
+        "units": 11415
+      },
+      {
+        "date": "2026-06-10",
+        "orders": 5782,
+        "units": 8573
+      },
+      {
+        "date": "2026-06-11",
+        "orders": 8358,
+        "units": 10854
+      },
+      {
+        "date": "2026-06-12",
+        "orders": 11796,
+        "units": 18225
+      },
+      {
+        "date": "2026-06-13",
+        "orders": 11926,
+        "units": 16265
+      },
+      {
+        "date": "2026-06-14",
+        "orders": 5393,
+        "units": 8065
+      },
+      {
+        "date": "2026-06-15",
+        "orders": 6983,
+        "units": 10827
+      },
+      {
+        "date": "2026-06-16",
+        "orders": 6590,
+        "units": 9117
+      },
+      {
+        "date": "2026-06-17",
+        "orders": 6007,
+        "units": 8688
+      },
+      {
+        "date": "2026-06-18",
+        "orders": 10399,
+        "units": 14242
+      },
+      {
+        "date": "2026-06-19",
+        "orders": 9835,
+        "units": 14107
+      },
+      {
+        "date": "2026-06-20",
+        "orders": 7886,
+        "units": 10786
+      },
+      {
+        "date": "2026-06-21",
+        "orders": 4504,
+        "units": 6624
+      },
+      {
+        "date": "2026-06-22",
+        "orders": 4651,
+        "units": 7039
+      },
+      {
+        "date": "2026-06-23",
+        "orders": 7014,
+        "units": 9842
+      },
+      {
+        "date": "2026-06-24",
+        "orders": 10517,
+        "units": 14172
+      },
+      {
+        "date": "2026-06-25",
+        "orders": 8633,
+        "units": 13030
+      },
+      {
+        "date": "2026-06-26",
+        "orders": 10182,
+        "units": 14437
+      },
+      {
+        "date": "2026-06-27",
+        "orders": 6967,
+        "units": 10793
+      },
+      {
+        "date": "2026-06-28",
+        "orders": 5267,
+        "units": 8339
+      },
+      {
+        "date": "2026-06-29",
+        "orders": 4307,
+        "units": 6515
+      },
+      {
+        "date": "2026-06-30",
+        "orders": 5073,
+        "units": 7287
+      },
+      {
+        "date": "2026-07-01",
+        "orders": 3518,
+        "units": 5131
+      },
+      {
+        "date": "2026-07-02",
+        "orders": 29,
+        "units": 50
+      }
+    ],
+    "daily_structure": [
+      {
+        "date": "2026-06-02",
+        "single_one": 5959,
+        "single_multi": 2550,
+        "multi_sku": 1527,
+        "total": 10036
+      },
+      {
+        "date": "2026-06-03",
+        "single_one": 8714,
+        "single_multi": 1940,
+        "multi_sku": 1110,
+        "total": 11764
+      },
+      {
+        "date": "2026-06-04",
+        "single_one": 3709,
+        "single_multi": 1206,
+        "multi_sku": 1068,
+        "total": 5983
+      },
+      {
+        "date": "2026-06-05",
+        "single_one": 5651,
+        "single_multi": 1933,
+        "multi_sku": 1033,
+        "total": 8617
+      },
+      {
+        "date": "2026-06-06",
+        "single_one": 5977,
+        "single_multi": 1935,
+        "multi_sku": 1292,
+        "total": 9204
+      },
+      {
+        "date": "2026-06-07",
+        "single_one": 4169,
+        "single_multi": 1010,
+        "multi_sku": 1035,
+        "total": 6214
+      },
+      {
+        "date": "2026-06-08",
+        "single_one": 3542,
+        "single_multi": 1140,
+        "multi_sku": 1350,
+        "total": 6032
+      },
+      {
+        "date": "2026-06-09",
+        "single_one": 5608,
+        "single_multi": 1568,
+        "multi_sku": 995,
+        "total": 8171
+      },
+      {
+        "date": "2026-06-10",
+        "single_one": 3569,
+        "single_multi": 1183,
+        "multi_sku": 1030,
+        "total": 5782
+      },
+      {
+        "date": "2026-06-11",
+        "single_one": 5958,
+        "single_multi": 2059,
+        "multi_sku": 341,
+        "total": 8358
+      },
+      {
+        "date": "2026-06-12",
+        "single_one": 7043,
+        "single_multi": 2439,
+        "multi_sku": 2314,
+        "total": 11796
+      },
+      {
+        "date": "2026-06-13",
+        "single_one": 8385,
+        "single_multi": 2196,
+        "multi_sku": 1345,
+        "total": 11926
+      },
+      {
+        "date": "2026-06-14",
+        "single_one": 3273,
+        "single_multi": 1013,
+        "multi_sku": 1107,
+        "total": 5393
+      },
+      {
+        "date": "2026-06-15",
+        "single_one": 4042,
+        "single_multi": 1320,
+        "multi_sku": 1621,
+        "total": 6983
+      },
+      {
+        "date": "2026-06-16",
+        "single_one": 4546,
+        "single_multi": 942,
+        "multi_sku": 1102,
+        "total": 6590
+      },
+      {
+        "date": "2026-06-17",
+        "single_one": 3755,
+        "single_multi": 1318,
+        "multi_sku": 934,
+        "total": 6007
+      },
+      {
+        "date": "2026-06-18",
+        "single_one": 7238,
+        "single_multi": 1961,
+        "multi_sku": 1200,
+        "total": 10399
+      },
+      {
+        "date": "2026-06-19",
+        "single_one": 6235,
+        "single_multi": 2317,
+        "multi_sku": 1283,
+        "total": 9835
+      },
+      {
+        "date": "2026-06-20",
+        "single_one": 5401,
+        "single_multi": 1562,
+        "multi_sku": 923,
+        "total": 7886
+      },
+      {
+        "date": "2026-06-21",
+        "single_one": 2739,
+        "single_multi": 901,
+        "multi_sku": 864,
+        "total": 4504
+      },
+      {
+        "date": "2026-06-22",
+        "single_one": 2829,
+        "single_multi": 750,
+        "multi_sku": 1072,
+        "total": 4651
+      },
+      {
+        "date": "2026-06-23",
+        "single_one": 4609,
+        "single_multi": 1586,
+        "multi_sku": 819,
+        "total": 7014
+      },
+      {
+        "date": "2026-06-24",
+        "single_one": 7258,
+        "single_multi": 2346,
+        "multi_sku": 913,
+        "total": 10517
+      },
+      {
+        "date": "2026-06-25",
+        "single_one": 5057,
+        "single_multi": 2374,
+        "multi_sku": 1202,
+        "total": 8633
+      },
+      {
+        "date": "2026-06-26",
+        "single_one": 6650,
+        "single_multi": 2295,
+        "multi_sku": 1237,
+        "total": 10182
+      },
+      {
+        "date": "2026-06-27",
+        "single_one": 4013,
+        "single_multi": 1534,
+        "multi_sku": 1420,
+        "total": 6967
+      },
+      {
+        "date": "2026-06-28",
+        "single_one": 2980,
+        "single_multi": 1051,
+        "multi_sku": 1236,
+        "total": 5267
+      },
+      {
+        "date": "2026-06-29",
+        "single_one": 2482,
+        "single_multi": 904,
+        "multi_sku": 921,
+        "total": 4307
+      },
+      {
+        "date": "2026-06-30",
+        "single_one": 3201,
+        "single_multi": 1084,
+        "multi_sku": 788,
+        "total": 5073
+      },
+      {
+        "date": "2026-07-01",
+        "single_one": 2158,
+        "single_multi": 713,
+        "multi_sku": 647,
+        "total": 3518
+      },
+      {
+        "date": "2026-07-02",
+        "single_one": 14,
+        "single_multi": 4,
+        "multi_sku": 11,
+        "total": 29
+      }
+    ],
+    "top_skus": [
+      {
+        "sku": "MLW01-860013804466",
+        "orders": 26510,
+        "units_30d": 34706,
+        "avg_daily_units": 1119.5,
+        "stock_qty": 28080,
+        "stock_days": 25.1,
+        "family": "中枕头/床品",
+        "dims": "35×15×15 cm",
+        "weight": 2.0
+      },
+      {
+        "sku": "MLW01-850078340863",
+        "orders": 13499,
+        "units_30d": 18980,
+        "avg_daily_units": 612.3,
+        "stock_qty": 13860,
+        "stock_days": 22.6,
+        "family": "中枕头/床品",
+        "dims": "48.26×15.24×15.24 cm",
+        "weight": 1.587573
+      },
+      {
+        "sku": "MLW01-860014330421",
+        "orders": 10083,
+        "units_30d": 15814,
+        "avg_daily_units": 510.1,
+        "stock_qty": 116143,
+        "stock_days": 227.7,
+        "family": "平面件/垫类",
+        "dims": "23×20×3 cm",
+        "weight": 0.14
+      },
+      {
+        "sku": "MLW01-860014330452",
+        "orders": 8956,
+        "units_30d": 14963,
+        "avg_daily_units": 482.7,
+        "stock_qty": 2820,
+        "stock_days": 5.8,
+        "family": "平面件/垫类",
+        "dims": "10×10×2 cm",
+        "weight": 0.1
+      },
+      {
+        "sku": "MLW01-860014330438",
+        "orders": 9506,
+        "units_30d": 11922,
+        "avg_daily_units": 384.6,
+        "stock_qty": 41776,
+        "stock_days": 108.6,
+        "family": "中枕头/床品",
+        "dims": "35×15×15 cm",
+        "weight": 2.1
+      },
+      {
+        "sku": "MLW01-810218040916",
+        "orders": 6733,
+        "units_30d": 8889,
+        "avg_daily_units": 286.7,
+        "stock_qty": 3,
+        "stock_days": 0.0,
+        "family": "中枕头/床品",
+        "dims": "50×15×15 cm",
+        "weight": 1.68
+      },
+      {
+        "sku": "MLW01-850078340856",
+        "orders": 6774,
+        "units_30d": 8495,
+        "avg_daily_units": 274.0,
+        "stock_qty": 3504,
+        "stock_days": 12.8,
+        "family": "中枕头/床品",
+        "dims": "48.26×15.24×15.24 cm",
+        "weight": 1.6
+      },
+      {
+        "sku": "MLW01-810218041289",
+        "orders": 5495,
+        "units_30d": 7217,
+        "avg_daily_units": 232.8,
+        "stock_qty": 1152,
+        "stock_days": 4.9,
+        "family": "中枕头/床品",
+        "dims": "35.56×15.24×15.24 cm",
+        "weight": 1.995807
+      },
+      {
+        "sku": "MLW01-850078340412",
+        "orders": 4083,
+        "units_30d": 7114,
+        "avg_daily_units": 229.5,
+        "stock_qty": 7493,
+        "stock_days": 32.7,
+        "family": "平面件/垫类",
+        "dims": "27.94×20.57×2.54 cm",
+        "weight": 0.417304
+      },
+      {
+        "sku": "MLW01-810218040923",
+        "orders": 5759,
+        "units_30d": 6990,
+        "avg_daily_units": 225.5,
+        "stock_qty": 438,
+        "stock_days": 1.9,
+        "family": "中枕头/床品",
+        "dims": "50.5×16.5×16.5 cm",
+        "weight": 2.23
+      },
+      {
+        "sku": "MLW01-850078340528",
+        "orders": 6066,
+        "units_30d": 6234,
+        "avg_daily_units": 201.1,
+        "stock_qty": 27490,
+        "stock_days": 136.7,
+        "family": "中枕头/床品",
+        "dims": "35.56×30.48×12.7 cm",
+        "weight": 1.496855
+      },
+      {
+        "sku": "MLW01-810218040893",
+        "orders": 5181,
+        "units_30d": 6200,
+        "avg_daily_units": 200.0,
+        "stock_qty": 4,
+        "stock_days": 0.0,
+        "family": "中枕头/床品",
+        "dims": "50×15×15 cm",
+        "weight": 1.68
+      },
+      {
+        "sku": "MLW01-810218041296",
+        "orders": 5246,
+        "units_30d": 5922,
+        "avg_daily_units": 191.0,
+        "stock_qty": 2286,
+        "stock_days": 12.0,
+        "family": "中枕头/床品",
+        "dims": "34.29×15.24×15.24 cm",
+        "weight": 2.009414
+      },
+      {
+        "sku": "MLW01-850078340184",
+        "orders": 3636,
+        "units_30d": 5496,
+        "avg_daily_units": 177.3,
+        "stock_qty": 0,
+        "stock_days": 0.0,
+        "family": "未匹配",
+        "dims": "0×0×0 cm",
+        "weight": 0
+      },
+      {
+        "sku": "MLW01-810218040961",
+        "orders": 3635,
+        "units_30d": 5164,
+        "avg_daily_units": 166.6,
+        "stock_qty": 1081,
+        "stock_days": 6.5,
+        "family": "中枕头/床品",
+        "dims": "48.26×15.24×15.24 cm",
+        "weight": 2.041166
+      },
+      {
+        "sku": "MLW01-810218041326",
+        "orders": 4010,
+        "units_30d": 5003,
+        "avg_daily_units": 161.4,
+        "stock_qty": 1,
+        "stock_days": 0.0,
+        "family": "中枕头/床品",
+        "dims": "35.56×15.24×15.24 cm",
+        "weight": 2.127802
+      },
+      {
+        "sku": "MLW01-810218040640",
+        "orders": 4768,
+        "units_30d": 4849,
+        "avg_daily_units": 156.4,
+        "stock_qty": 3930,
+        "stock_days": 25.1,
+        "family": "中枕头/床品",
+        "dims": "36×31×12.7 cm",
+        "weight": 1.542214
+      },
+      {
+        "sku": "MLW01-810218040947",
+        "orders": 3309,
+        "units_30d": 4533,
+        "avg_daily_units": 146.2,
+        "stock_qty": 720,
+        "stock_days": 4.9,
+        "family": "中枕头/床品",
+        "dims": "48.26×16.5×16.5 cm",
+        "weight": 1.814369
+      },
+      {
+        "sku": "MLW01-850078340849",
+        "orders": 3234,
+        "units_30d": 4384,
+        "avg_daily_units": 141.4,
+        "stock_qty": 0,
+        "stock_days": 0.0,
+        "family": "未匹配",
+        "dims": "0×0×0 cm",
+        "weight": 0
+      },
+      {
+        "sku": "MLW01-810218040909",
+        "orders": 3602,
+        "units_30d": 4271,
+        "avg_daily_units": 137.8,
+        "stock_qty": 5,
+        "stock_days": 0.0,
+        "family": "中枕头/床品",
+        "dims": "50.55×15.24×15.19 cm",
+        "weight": 1.587573
+      },
+      {
+        "sku": "MLW01-810218040657",
+        "orders": 3529,
+        "units_30d": 3627,
+        "avg_daily_units": 117.0,
+        "stock_qty": 14018,
+        "stock_days": 119.8,
+        "family": "中枕头/床品",
+        "dims": "36×31×11.5 cm",
+        "weight": 1.67
+      },
+      {
+        "sku": "MLW01-810218040930",
+        "orders": 2823,
+        "units_30d": 3461,
+        "avg_daily_units": 111.6,
+        "stock_qty": 0,
+        "stock_days": 0.0,
+        "family": "未匹配",
+        "dims": "0×0×0 cm",
+        "weight": 0
+      },
+      {
+        "sku": "MLW01-810218040954",
+        "orders": 2732,
+        "units_30d": 3435,
+        "avg_daily_units": 110.8,
+        "stock_qty": 1320,
+        "stock_days": 11.9,
+        "family": "中枕头/床品",
+        "dims": "50.5×16.5×16.5 cm",
+        "weight": 2.23
+      },
+      {
+        "sku": "MLW01-198715148442",
+        "orders": 2129,
+        "units_30d": 3335,
+        "avg_daily_units": 107.6,
+        "stock_qty": 142513,
+        "stock_days": 1324.7,
+        "family": "中枕头/床品",
+        "dims": "50×15×15 cm",
+        "weight": 1.0
+      },
+      {
+        "sku": "MLW01-850078340306",
+        "orders": 3282,
+        "units_30d": 3283,
+        "avg_daily_units": 105.9,
+        "stock_qty": 3380,
+        "stock_days": 31.9,
+        "family": "大枕头/大抱枕",
+        "dims": "55×36×36 cm",
+        "weight": 3.5
+      }
+    ],
+    "top_combinations": [
+      [
+        "MLW01-860013804466 + MLW01-860014330438",
+        1922
+      ],
+      [
+        "MLW01-850078340863 + MLW01-860014330452",
+        1328
+      ],
+      [
+        "MLW01-810218041265 + MLW01-860014330421",
+        923
+      ],
+      [
+        "MLW01-810218041272 + MLW01-860014330421",
+        720
+      ],
+      [
+        "MLW01-860013804466 + MLW01-860014330421",
+        711
+      ],
+      [
+        "MLW01-850078340856 + MLW01-860014330469",
+        687
+      ],
+      [
+        "MLW01-850078340528 + MLW01-860013804466",
+        573
+      ],
+      [
+        "MLW01-850078340856 + MLW01-860014330452",
+        492
+      ],
+      [
+        "MLW01-198715785418 + MLW01-860013804466",
+        361
+      ],
+      [
+        "MLW01-860013804466 + MLW01-860014330445",
+        340
+      ],
+      [
+        "MLW01-810218041296 + MLW01-860014330421",
+        290
+      ],
+      [
+        "MLW01-810218040138 + MLW01-810218040213",
+        276
+      ]
+    ],
+    "stats": {
+      "order_units_p50": 1.0,
+      "order_units_p90": 2.0,
+      "sku_count_p50": 1.0,
+      "sku_count_p90": 2.0,
+      "outbound_hours_median": 2.0,
+      "outbound_hours_p90": 34.0
+    }
+  },
+  "design": {
+    "diagnosis": [
+      "近30天出库 227,638 单、328,251 件，日均约 7,588 单；集中仓需要按高峰日 8,000+ 单预留弹性。",
+      "按页面 SOP 阈值重算三通道：Alpha 64.5% / Beta 19.3% / Gamma 16.2%。单品订单占主导，播种墙不应承接全部订单。",
+      "库存 261 个 SKU、1,684,846 件、约 10,458 托、21,046 m³；库存深度高，适合做前置区+后备区双层库存。",
+      "近30天入库 824,192 件、142 个柜/跟踪号，上架完成中位时效 14.94 小时；集中仓需要独立收货缓冲和上架优先级。",
+      "SKU 体积以枕头/床品为主，库内瓶颈更像“大件轻抛搬运 + 播种格口占用”，而不是传统小件密集拣选。"
+    ],
+    "zones": [
+      {
+        "name": "R 收货缓冲与质检区",
+        "size": "靠入库 dock，按柜号/入库单划临时 staging",
+        "logic": "卸柜、点数、异常差异、待上架托盘分流；爆款 SKU 到货后优先补 A 区。"
+      },
+      {
+        "name": "A 爆款前置整托区",
+        "size": "靠近 Dock，Top10-25 SKU，每 SKU 0.5-6 托",
+        "logic": "承接 Alpha 和高频 Beta，整托下架、扫码到托、贴标原包装出库。"
+      },
+      {
+        "name": "B 单品多件工作站",
+        "size": "2-4 个双人工位，配分格货架",
+        "logic": "同 SKU 多件且日订单 >10 单独立处理，1人分货、1人打包贴标。"
+      },
+      {
+        "name": "C 多品播种区",
+        "size": "4-6 面开放式可调层板播种墙，每墙约50格",
+        "logic": "Gamma 50单/波次，按承运商 cutoff、SKU 重叠度、大件订单分波。"
+      },
+      {
+        "name": "D 大件/异常区",
+        "size": "地面画格 + 大格位货架 + 缺货/破损暂存",
+        "logic": "55×30×30cm 级大件独立波次；超规格包材订单组长处理。"
+      },
+      {
+        "name": "E 包材与压缩区",
+        "size": "5种标准包材 7天安全库存",
+        "logic": "小袋/大袋/小中大箱，系统推荐只允许升档；预留真空压缩位降低 DIM weight。"
+      },
+      {
+        "name": "F 出库分拨暂存",
+        "size": "按 USPS / Amazon Ground / FedEx / Other 分 lane",
+        "logic": "三通道汇合后复核、打托、装车，按 pickup cutoff 管控优先级。"
+      }
+    ],
+    "process": [
+      {
+        "step": "0. 入库收货",
+        "text": "按柜号/入库单卸货，点数收货后按 SKU 热度决定补前置区、进后备区或进异常区。"
+      },
+      {
+        "step": "1. 订单池分流",
+        "text": "WMS 按 SKU 种类、件数、当日 SKU 单量打 Alpha/Beta/Gamma 标签。"
+      },
+      {
+        "step": "2. Alpha 快道",
+        "text": "一票一件直接从爆款前置区或普通位批量拣，扫托盘/扫件后贴标出库。"
+      },
+      {
+        "step": "3. Beta 工作站",
+        "text": "单 SKU 多件批量下架到站，面单标组包数，分格后捆扎/装箱。"
+      },
+      {
+        "step": "4. Gamma 播种",
+        "text": "多品订单生成 50 单波次，汇总拣货、扫码亮灯/显示格口、齐套后打包。"
+      },
+      {
+        "step": "5. 异常闭环",
+        "text": "缺货、破损、包材不匹配、超规格分别进异常区，系统挂起并日报。"
+      },
+      {
+        "step": "6. 出库交接",
+        "text": "按承运商 lane 暂存，截单前集中复核打托装车。"
+      }
+    ],
+    "staffing": [
+      {
+        "area": "入库/上架",
+        "staff": "3-6人",
+        "target": "到仓后当日收货，爆款优先上架"
+      },
+      {
+        "area": "Alpha",
+        "staff": "2-4人",
+        "target": "120-150 件/人/小时"
+      },
+      {
+        "area": "Beta",
+        "staff": "2-4人",
+        "target": "每站2人，优先高频 SKU"
+      },
+      {
+        "area": "Gamma",
+        "staff": "8-12人",
+        "target": "4-6面墙并行，每墙2人"
+      },
+      {
+        "area": "补货/异常/打托",
+        "staff": "3-5人",
+        "target": "爆款不断货，异常不过夜"
+      }
+    ],
+    "open_questions": [
+      "集中仓是否最终确定为 LA18？需要 dock 位置、可用面积、柱网和通道宽度后才能画精确比例库图。",
+      "WMS 是否已支持“扫码显示目标格口号”、托盘容器精确到托、面单正反面组包数打印？",
+      "入库收货是否按柜号、入库单号还是 SKU 维度生成上架任务？这会影响 staging 区划线和优先补货逻辑。",
+      "承运商 pickup 截止时间、每天车次和是否混装，会影响出库暂存 lane 数量与波次释放节奏。"
+    ]
+  }
+}

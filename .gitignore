@@ -1,0 +1,10 @@
+# Raw business data is large and may contain customer/order details.
+*.xlsx
+*.xls
+
+# Local/runtime artifacts.
+__pycache__/
+.DS_Store
+
+# Keep generated site assets tracked explicitly.
+!site/melo_analysis.json
