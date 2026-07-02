@@ -35,7 +35,7 @@ function render(data) {
   document.getElementById("metricGrid").innerHTML = [
     metric("30天出库订单", fmt.format(totalOrders), `${fmt.format(orders.totals.units)} 件`),
     metric("日均订单", fmt.format(Math.round(totalOrders / 30)), "按30天口径"),
-    metric("规划面积", "12,000㎡", "截图完整区域"),
+    metric("规划面积", "12,000㎡", "Melo 专属区域"),
     metric("Alpha + Beta", pct((orders.route_orders["Alpha 单品单件快道"] || 0) + (orders.route_orders["Beta 单品多件工作站"] || 0), totalOrders), "前置区主流量"),
     metric("库存件数", fmt.format(inventory.totals.qty), `${fmt.format(Math.round(inventory.totals.pallets))} 托`),
     metric("SKU 数", fmt.format(inventory.totals.skus), `${fmt.format(Math.round(inventory.totals.volume))} m³`),
