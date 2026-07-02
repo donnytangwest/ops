@@ -1,0 +1,2663 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>西邮物流全业务实时看板原型</title>
+  <style>
+    :root {
+      --bg: #f4f7fa;
+      --surface: #ffffff;
+      --surface-2: #eef3f7;
+      --ink: #18212b;
+      --muted: #667586;
+      --line: #d7e0e8;
+      --blue: #1f6feb;
+      --teal: #0f766e;
+      --green: #118445;
+      --amber: #b7791f;
+      --red: #c24130;
+      --cyan: #087ea4;
+      --shadow: 0 10px 22px rgba(23, 34, 48, 0.07);
+      font-family: Inter, "SF Pro Display", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background:
+        linear-gradient(180deg, #eef4f8 0, #f4f7fa 240px, #f4f7fa 100%);
+      color: var(--ink);
+      min-height: 100vh;
+      line-height: 1.45;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 236px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      background: #17212b;
+      color: #dce6ee;
+      padding: 20px 14px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: auto;
+    }
+
+    .brand {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 4px 8px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      margin-bottom: 14px;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #ffffff 0%, #9bd8ff 45%, #1f6feb 100%);
+      display: grid;
+      place-items: center;
+      color: #122033;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .brand-title {
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.2;
+      color: #ffffff;
+    }
+
+    .brand-subtitle {
+      margin-top: 3px;
+      font-size: 11px;
+      color: #a9b8c6;
+    }
+
+    .nav-section {
+      margin: 16px 0 8px;
+      padding: 0 8px;
+      color: #91a2b2;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 4px;
+    }
+
+    .nav-item {
+      width: 100%;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: #cbd8e3;
+      display: grid;
+      grid-template-columns: 24px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 9px;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+    }
+
+    .nav-item.active {
+      box-shadow: inset 3px 0 0 #75b8ff;
+    }
+
+    .nav-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 5px;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .nav-label {
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 13px;
+    }
+
+    .nav-badge {
+      min-width: 20px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: rgba(31, 111, 235, 0.22);
+      color: #cfe2ff;
+      font-size: 11px;
+      text-align: center;
+    }
+
+    .content {
+      min-width: 0;
+      padding: 16px 18px 26px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+
+    .title-block h1 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.2;
+      font-weight: 850;
+      letter-spacing: 0;
+    }
+
+    .title-block p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      max-width: 760px;
+      line-height: 1.5;
+    }
+
+    .live-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .pill {
+      min-height: 32px;
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--ink);
+      padding: 7px 10px;
+      font-size: 12px;
+      box-shadow: 0 2px 8px rgba(23, 34, 48, 0.04);
+      white-space: nowrap;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 5px rgba(17, 132, 69, 0.13);
+    }
+
+    .role-tabs {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(100px, 1fr));
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .role-btn {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--ink);
+      border-radius: 6px;
+      padding: 10px 9px;
+      min-height: 52px;
+      cursor: pointer;
+      text-align: left;
+      display: grid;
+      gap: 3px;
+      box-shadow: 0 3px 9px rgba(23, 34, 48, 0.03);
+    }
+
+    .role-btn:hover,
+    .role-btn.active {
+      border-color: var(--blue);
+      background: #f0f6ff;
+    }
+
+    .role-name {
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .role-scope {
+      font-size: 11px;
+      color: var(--muted);
+      white-space: normal;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.25;
+    }
+
+    .grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .grid.kpis {
+      grid-template-columns: repeat(4, minmax(146px, 1fr));
+    }
+
+    .grid.main {
+      grid-template-columns: minmax(0, 1.25fr) minmax(330px, 0.75fr);
+      align-items: start;
+      margin-top: 12px;
+    }
+
+    .grid.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      min-width: 0;
+      transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+    }
+
+    .card:hover {
+      border-color: #bed0df;
+      box-shadow: 0 12px 28px rgba(23, 34, 48, 0.09);
+      transform: translateY(-1px);
+    }
+
+    .card-head {
+      padding: 11px 12px 9px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 850;
+      margin: 0;
+    }
+
+    .card-subtitle {
+      margin: 3px 0 0;
+      font-size: 11.5px;
+      color: var(--muted);
+    }
+
+    .card-body {
+      padding: 12px;
+    }
+
+    .kpi {
+      padding: 12px;
+      min-height: 116px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .kpi-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .kpi-label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .kpi-value {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: 0;
+      line-height: 1;
+    }
+
+    .kpi-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .trend {
+      font-weight: 850;
+    }
+
+    .trend.good {
+      color: var(--green);
+    }
+
+    .trend.warn {
+      color: var(--amber);
+    }
+
+    .trend.bad {
+      color: var(--red);
+    }
+
+    .spark {
+      width: 100%;
+      height: 28px;
+      border-radius: 4px;
+      background: linear-gradient(90deg, rgba(31, 111, 235, 0.12), rgba(15, 118, 110, 0.1));
+      overflow: hidden;
+      position: relative;
+    }
+
+    .spark svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .map-wrap {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 230px;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .network-map {
+      min-height: 304px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(90deg, rgba(31, 111, 235, 0.04) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(31, 111, 235, 0.04) 1px, transparent 1px),
+        #f8fbfd;
+      background-size: 28px 28px;
+      border-radius: 6px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .lane {
+      position: absolute;
+      height: 2px;
+      background: rgba(31, 111, 235, 0.28);
+      transform-origin: 0 50%;
+    }
+
+    .lane::after {
+      content: "";
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--blue);
+      top: -3px;
+      left: 0;
+      animation: move-dot 4.8s linear infinite;
+    }
+
+    @keyframes move-dot {
+      from { left: 4%; opacity: 0.2; }
+      18% { opacity: 1; }
+      to { left: 96%; opacity: 0.2; }
+    }
+
+    .node {
+      position: absolute;
+      min-width: 98px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 6px;
+      padding: 8px 9px;
+      box-shadow: 0 8px 18px rgba(23, 34, 48, 0.12);
+    }
+
+    .node strong {
+      display: block;
+      font-size: 12px;
+    }
+
+    .node span {
+      display: block;
+      margin-top: 4px;
+      font-size: 10.5px;
+      color: var(--muted);
+    }
+
+    .node.good {
+      border-left: 4px solid var(--green);
+    }
+
+    .node.warn {
+      border-left: 4px solid var(--amber);
+    }
+
+    .node.bad {
+      border-left: 4px solid var(--red);
+    }
+
+    .node.cn { left: 6%; top: 44%; }
+    .node.la { left: 47%; top: 18%; }
+    .node.nj { right: 6%; top: 25%; }
+    .node.sav { right: 15%; bottom: 18%; }
+    .node.air { left: 38%; bottom: 13%; }
+
+    .map-side {
+      display: grid;
+      gap: 8px;
+    }
+
+    .mini-stat {
+      border: 1px solid var(--line);
+      background: #fbfdff;
+      border-radius: 6px;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .mini-stat span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .mini-stat strong {
+      font-size: 16px;
+    }
+
+    .bar-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 118px minmax(0, 1fr) 46px;
+      gap: 9px;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .bar-track {
+      height: 10px;
+      border-radius: 999px;
+      background: var(--surface-2);
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: var(--blue);
+      width: 50%;
+      transition: width 420ms ease;
+    }
+
+    .bar-fill.green {
+      background: var(--green);
+    }
+
+    .bar-fill.amber {
+      background: var(--amber);
+    }
+
+    .bar-fill.red {
+      background: var(--red);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      min-width: 660px;
+    }
+
+    th,
+    td {
+      padding: 10px 9px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    th {
+      color: var(--muted);
+      font-weight: 800;
+      background: #f8fbfd;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 11px;
+    }
+
+    .status.good {
+      color: #0f5f35;
+      background: #e5f7ed;
+    }
+
+    .status.warn {
+      color: #7a4b08;
+      background: #fff3d1;
+    }
+
+    .status.bad {
+      color: #8f2418;
+      background: #ffe6e1;
+    }
+
+    .feed {
+      display: grid;
+      gap: 9px;
+      max-height: 332px;
+      overflow: auto;
+      padding-right: 2px;
+    }
+
+    .feed-item {
+      display: grid;
+      grid-template-columns: 8px minmax(0, 1fr);
+      gap: 9px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 10px;
+      background: #fbfdff;
+    }
+
+    .feed-mark {
+      width: 8px;
+      border-radius: 999px;
+      background: var(--blue);
+    }
+
+    .feed-mark.warn {
+      background: var(--amber);
+    }
+
+    .feed-mark.bad {
+      background: var(--red);
+    }
+
+    .feed-title {
+      font-size: 12px;
+      font-weight: 850;
+      line-height: 1.35;
+    }
+
+    .feed-meta {
+      margin-top: 5px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .role-panel {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .focus-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 8px;
+    }
+
+    .focus-list li {
+      display: grid;
+      grid-template-columns: 22px minmax(0, 1fr);
+      gap: 8px;
+      align-items: start;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .check {
+      width: 22px;
+      height: 22px;
+      border-radius: 5px;
+      display: grid;
+      place-items: center;
+      background: #eaf4ff;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .perm-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .perm {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 9px;
+      min-height: 82px;
+      background: #fbfdff;
+    }
+
+    .perm strong {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+
+    .perm span {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    .module-view {
+      display: none;
+      margin-top: 12px;
+    }
+
+    .module-view.active {
+      display: block;
+    }
+
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .module-card {
+      border: 1px solid var(--line);
+      background: #fbfdff;
+      border-radius: 6px;
+      padding: 12px;
+      min-height: 136px;
+      display: grid;
+      align-content: space-between;
+      gap: 12px;
+    }
+
+    .module-card h3 {
+      margin: 0;
+      font-size: 13px;
+    }
+
+    .module-card p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 11.5px;
+      line-height: 1.45;
+    }
+
+    .small-number {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+    }
+
+    .small-number strong {
+      font-size: 19px;
+    }
+
+    .small-number span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .home-insights {
+      margin: 12px 0;
+    }
+
+    .brief-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(230px, 0.9fr) minmax(0, 1.05fr);
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .brief-panel {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fbfdff;
+      padding: 11px;
+      min-width: 0;
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+
+    .brief-panel h3 {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .brief-panel p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 11.5px;
+      line-height: 1.5;
+    }
+
+    .brief-callouts {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .brief-callout {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--surface);
+      padding: 9px;
+      min-height: 78px;
+    }
+
+    .brief-callout span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .brief-callout strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .donut-wrap {
+      display: grid;
+      grid-template-columns: 104px minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+    }
+
+    .donut {
+      width: 104px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: conic-gradient(var(--blue) 0 var(--p1), var(--teal) var(--p1) var(--p2), var(--amber) var(--p2) var(--p3), var(--red) var(--p3) 100%);
+      position: relative;
+      box-shadow: inset 0 0 0 1px rgba(23, 34, 48, 0.08);
+    }
+
+    .donut::after {
+      content: "";
+      position: absolute;
+      inset: 22px;
+      border-radius: 50%;
+      background: var(--surface);
+      box-shadow: inset 0 0 0 1px var(--line);
+    }
+
+    .legend {
+      display: grid;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    .legend-row {
+      display: grid;
+      grid-template-columns: 10px minmax(0, 1fr) auto;
+      gap: 7px;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--blue);
+    }
+
+    .legend-row span:nth-child(2) {
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--muted);
+    }
+
+    .waterfall {
+      display: grid;
+      gap: 9px;
+    }
+
+    .waterfall-row {
+      display: grid;
+      grid-template-columns: 92px minmax(0, 1fr) 58px;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    .waterfall-track {
+      height: 12px;
+      border-radius: 999px;
+      background: var(--surface-2);
+      overflow: hidden;
+    }
+
+    .waterfall-fill {
+      display: block;
+      height: 100%;
+      width: var(--w);
+      border-radius: inherit;
+      background: var(--green);
+      transform-origin: left center;
+    }
+
+    .waterfall-fill.neg {
+      background: var(--red);
+    }
+
+    .warehouse-heat {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .warehouse-tile {
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--green);
+      border-radius: 6px;
+      background: var(--surface);
+      padding: 9px;
+      min-height: 72px;
+    }
+
+    .warehouse-tile.warn {
+      border-left-color: var(--amber);
+    }
+
+    .warehouse-tile.bad {
+      border-left-color: var(--red);
+    }
+
+    .warehouse-tile strong {
+      display: block;
+      font-size: 11.5px;
+      margin-bottom: 6px;
+    }
+
+    .warehouse-tile span {
+      display: block;
+      color: var(--muted);
+      font-size: 10.5px;
+      line-height: 1.45;
+    }
+
+    .source-line {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .fact-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .fact-chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--muted);
+      padding: 4px 7px;
+      font-size: 10.5px;
+      line-height: 1.25;
+    }
+
+    .fact-chip strong {
+      color: var(--ink);
+      font-weight: 800;
+    }
+
+    .module-detail {
+      margin-top: 12px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .detail-header {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: linear-gradient(135deg, #ffffff 0%, #f4f9fd 100%);
+      padding: 12px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .detail-header h3 {
+      margin: 0;
+      font-size: 14px;
+    }
+
+    .detail-header p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .detail-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .detail-tag {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--muted);
+      padding: 5px 8px;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .detail-section {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fbfdff;
+      padding: 12px;
+      min-width: 0;
+      box-shadow: 0 4px 12px rgba(23, 34, 48, 0.035);
+    }
+
+    .detail-section h4 {
+      margin: 0 0 10px;
+      font-size: 13px;
+    }
+
+    .metric-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .metric-tile {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--surface);
+      padding: 9px;
+      min-height: 76px;
+    }
+
+    .metric-tile span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .metric-tile strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .page-list,
+    .action-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 8px;
+    }
+
+    .page-list li,
+    .action-list li {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--surface);
+      padding: 9px;
+      display: grid;
+      gap: 4px;
+    }
+
+    .page-list strong,
+    .action-list strong {
+      font-size: 12px;
+    }
+
+    .page-list span,
+    .action-list span {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    .page-tree {
+      display: grid;
+      gap: 10px;
+    }
+
+    .tree-card {
+      border: 1px solid var(--line);
+      border-top: 3px solid #9bc2ee;
+      border-radius: 6px;
+      background: var(--surface);
+      overflow: hidden;
+      box-shadow: 0 3px 12px rgba(23, 34, 48, 0.035);
+    }
+
+    .tree-head {
+      padding: 10px;
+      background: linear-gradient(180deg, #f8fbfd 0, #ffffff 100%);
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .tree-head strong {
+      font-size: 13px;
+      line-height: 1.3;
+    }
+
+    .tree-head span {
+      color: var(--muted);
+      font-size: 11px;
+      white-space: normal;
+      text-align: right;
+    }
+
+    .tree-body {
+      padding: 10px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(168px, 0.55fr);
+      gap: 10px;
+    }
+
+    .lens-strip {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding-bottom: 2px;
+    }
+
+    .lens-chip {
+      border: 1px solid #d7e6f3;
+      border-radius: 999px;
+      background: #f5faff;
+      color: #506275;
+      padding: 4px 7px;
+      font-size: 10.5px;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .lens-chip strong {
+      color: var(--blue);
+      margin-right: 4px;
+    }
+
+    .drill-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 6px;
+    }
+
+    .drill-list li {
+      display: grid;
+      grid-template-columns: 20px minmax(0, 1fr);
+      gap: 7px;
+      align-items: start;
+      color: var(--ink);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .drill-content {
+      display: grid;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .drill-title {
+      overflow-wrap: anywhere;
+    }
+
+    .drill-metric {
+      color: var(--muted);
+      font-size: 10.5px;
+      font-style: normal;
+      line-height: 1.3;
+    }
+
+    .drill-index {
+      width: 20px;
+      height: 20px;
+      border-radius: 5px;
+      background: #eaf4ff;
+      color: var(--blue);
+      display: grid;
+      place-items: center;
+      font-size: 10px;
+      font-weight: 900;
+    }
+
+    .tree-meta {
+      border-left: 1px solid var(--line);
+      padding-left: 10px;
+      display: grid;
+      gap: 8px;
+      align-content: start;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .tree-meta strong {
+      color: var(--ink);
+      font-size: 12px;
+    }
+
+    .source-link-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .source-link {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #ffffff;
+      color: var(--ink);
+      padding: 9px;
+      text-decoration: none;
+      display: grid;
+      gap: 4px;
+      min-height: 66px;
+    }
+
+    .source-link:hover {
+      border-color: var(--blue);
+      background: #f5faff;
+    }
+
+    .source-link span {
+      color: var(--muted);
+      font-size: 10.5px;
+    }
+
+    .source-link strong {
+      color: var(--blue);
+      font-size: 11.5px;
+      line-height: 1.35;
+    }
+
+    .finance-diagnostics {
+      display: grid;
+      gap: 12px;
+    }
+
+    .diagnostic-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .diagnostic-card {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--surface);
+      padding: 10px;
+      min-height: 108px;
+      display: grid;
+      gap: 7px;
+      align-content: start;
+    }
+
+    .diagnostic-card strong {
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .diagnostic-card span {
+      color: var(--muted);
+      font-size: 10.5px;
+      line-height: 1.45;
+    }
+
+    .benchmark-table {
+      width: 100%;
+      min-width: 780px;
+      border-collapse: collapse;
+      font-size: 11.5px;
+    }
+
+    .benchmark-table th,
+    .benchmark-table td {
+      padding: 8px 7px;
+      border-bottom: 1px solid var(--line);
+      white-space: normal;
+      vertical-align: top;
+    }
+
+    .benchmark-table th {
+      background: #f8fbfd;
+      color: var(--muted);
+      font-weight: 850;
+    }
+
+    .gap-bad {
+      color: var(--red);
+      font-weight: 850;
+    }
+
+    .gap-warn {
+      color: var(--amber);
+      font-weight: 850;
+    }
+
+    .gap-good {
+      color: var(--green);
+      font-weight: 850;
+    }
+
+    .finance-note {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .flow-line {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .flow-step {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--surface);
+      padding: 9px;
+      min-height: 62px;
+    }
+
+    .flow-step strong {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    .flow-step span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .footer-note {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 1180px) {
+      .role-tabs {
+        grid-template-columns: repeat(3, minmax(120px, 1fr));
+      }
+
+      .grid.kpis,
+      .module-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .grid.main,
+      .role-panel,
+      .map-wrap {
+        grid-template-columns: 1fr;
+      }
+
+      .map-side {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .warehouse-heat {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 780px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: relative;
+        height: auto;
+      }
+
+      .content {
+        padding: 14px;
+      }
+
+      .topbar {
+        display: grid;
+      }
+
+      .live-strip {
+        justify-content: flex-start;
+      }
+
+      .role-tabs,
+      .grid.kpis,
+      .grid.two,
+      .module-grid,
+      .brief-grid,
+      .detail-grid,
+      .metric-strip,
+      .flow-line,
+      .tree-body,
+      .diagnostic-grid,
+      .source-link-list,
+      .map-side,
+      .perm-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .detail-header {
+        grid-template-columns: 1fr;
+      }
+
+      .detail-tags {
+        justify-content: flex-start;
+      }
+
+      .tree-meta {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+        padding-left: 0;
+        padding-top: 10px;
+      }
+
+      .brief-callouts,
+      .donut-wrap,
+      .warehouse-heat {
+        grid-template-columns: 1fr;
+      }
+
+      .network-map {
+        min-height: 420px;
+      }
+
+      .node {
+        min-width: 122px;
+      }
+
+      .node.cn { left: 6%; top: 40%; }
+      .node.la { left: 45%; top: 8%; }
+      .node.nj { right: 4%; top: 34%; }
+      .node.sav { right: 9%; bottom: 15%; }
+      .node.air { left: 22%; bottom: 8%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">WP</div>
+        <div>
+          <div class="brand-title">西邮物流</div>
+          <div class="brand-subtitle">WP Global | wpglb.com</div>
+        </div>
+      </div>
+
+      <div class="nav-section">目录</div>
+      <div class="nav-list" id="navList"></div>
+
+      <div class="nav-section">管理</div>
+      <button class="nav-item" data-module="permissions">
+        <span class="nav-icon">R</span>
+        <span class="nav-label">角色与权限</span>
+        <span class="nav-badge">RBAC</span>
+      </button>
+      <button class="nav-item" data-module="quality">
+        <span class="nav-icon">D</span>
+        <span class="nav-label">数据质量</span>
+        <span class="nav-badge">Live</span>
+      </button>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div class="title-block">
+          <h1 id="pageTitle">西邮物流全业务实时看板</h1>
+          <p id="pageSubtitle">面向欧美中大件物流和海外仓网络的管理控制塔，覆盖头程、清关、仓储、尾程、自营车队、退货、计费和利润。</p>
+        </div>
+        <div class="live-strip">
+          <div class="pill"><span class="dot"></span><span>实时流运行中</span></div>
+          <div class="pill">本地时间 <strong id="clock">--:--:--</strong></div>
+          <div class="pill">数据延迟 <strong id="latency">18s</strong></div>
+        </div>
+      </header>
+
+      <section class="role-tabs" id="roleTabs"></section>
+
+      <section class="grid kpis" id="kpiGrid"></section>
+
+      <section class="home-insights" id="homeInsights"></section>
+
+      <section class="grid main">
+        <div class="grid">
+          <article class="card">
+            <div class="card-head">
+              <div>
+                <h2 class="card-title">仓网控制塔</h2>
+                <p class="card-subtitle">深圳供应链到美国多仓节点的实时状态</p>
+              </div>
+              <span class="status good" id="networkStatus">健康</span>
+            </div>
+            <div class="card-body">
+              <div class="map-wrap">
+                <div class="network-map" aria-label="西邮物流仓网示意">
+                  <div class="lane" style="left: 20%; top: 50%; width: 32%; transform: rotate(-23deg);"></div>
+                  <div class="lane" style="left: 54%; top: 28%; width: 31%; transform: rotate(8deg); animation-delay: .8s;"></div>
+                  <div class="lane" style="left: 54%; top: 32%; width: 28%; transform: rotate(36deg); animation-delay: 1.3s;"></div>
+                  <div class="lane" style="left: 20%; top: 54%; width: 29%; transform: rotate(32deg); animation-delay: 1.9s;"></div>
+                  <div class="node cn good"><strong>深圳集货</strong><span>头程 / 报关 / 客户交接</span></div>
+                  <div class="node la warn"><strong>美西 LA 仓群</strong><span id="laNode">库容 88% / 出库 96%</span></div>
+                  <div class="node nj good"><strong>美东 NJ 仓群</strong><span id="njNode">库容 74% / 出库 98%</span></div>
+                  <div class="node sav bad"><strong>萨瓦纳仓</strong><span id="savNode">库容 91% / 清关滞留</span></div>
+                  <div class="node air good"><strong>自营车队</strong><span>卡派 / 转运 / 尾程协同</span></div>
+                </div>
+                <div class="map-side" id="mapStats"></div>
+              </div>
+            </div>
+          </article>
+
+          <div class="grid two">
+            <article class="card">
+              <div class="card-head">
+                <div>
+                  <h2 class="card-title">角色焦点</h2>
+                  <p class="card-subtitle" id="roleQuestion">当前角色的核心经营问题</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="role-panel">
+                  <ul class="focus-list" id="focusList"></ul>
+                  <div class="perm-grid" id="rolePerms"></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card-head">
+                <div>
+                  <h2 class="card-title">关键链路表现</h2>
+                  <p class="card-subtitle">按当前角色过滤后的经营指标</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="bar-list" id="barList"></div>
+              </div>
+            </article>
+          </div>
+
+          <article class="card module-view" id="moduleView">
+            <div class="card-head">
+              <div>
+                <h2 class="card-title" id="moduleTitle">全局驾驶舱</h2>
+                <p class="card-subtitle" id="moduleSubtitle">实时红黄绿灯与行动闭环</p>
+              </div>
+              <span class="status warn" id="moduleBadge">3 项预警</span>
+            </div>
+            <div class="card-body">
+              <div class="module-grid" id="moduleCards"></div>
+              <div class="module-detail" id="moduleDetail"></div>
+            </div>
+          </article>
+        </div>
+
+        <div class="grid">
+          <article class="card">
+            <div class="card-head">
+              <div>
+                <h2 class="card-title">实时告警流</h2>
+                <p class="card-subtitle">SLA、清关、库容、财务和客户风险</p>
+              </div>
+              <span class="status bad" id="alertCount">P1 2</span>
+            </div>
+            <div class="card-body">
+              <div class="feed" id="alertFeed"></div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-head">
+              <div>
+                <h2 class="card-title">行动闭环</h2>
+                <p class="card-subtitle">红灯指标必须对应 owner 与 ETA</p>
+              </div>
+            </div>
+            <div class="card-body table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>事项</th>
+                    <th>Owner</th>
+                    <th>影响</th>
+                    <th>ETA</th>
+                    <th>状态</th>
+                  </tr>
+                </thead>
+                <tbody id="actionRows"></tbody>
+              </table>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <p class="footer-note">本原型按西邮物流（WP Global，www.wpglb.com）作为欧美中大件物流与海外仓服务公司进行场景化设计；实时数值为演示数据，落地时由 OMS、WMS、TMS、DMS、FMS、CRM、清关行与承运商 API 驱动。</p>
+    </main>
+  </div>
+
+  <script>
+    const roles = {
+      warehouse: {
+        name: "仓库经理",
+        scope: "单仓作业",
+        title: "仓库经理实时作业看板",
+        subtitle: "聚焦本仓入库、上架、出库、库容、人效和异常处理。",
+        question: "本仓今天能否按 SLA 完成作业？",
+        kpis: [
+          ["仓储毛利率", -32.1, "%", "bad"],
+          ["操作毛利率", 24.8, "%", "good"],
+          ["库容利用率", 88.6, "%", "warn"],
+          ["待处理异常", 38, "单", "bad"]
+        ],
+        focus: ["截单前风险订单与波次积压", "卸柜、收货、上架的队列时长", "库位拥堵、库容爆仓和临时人力需求", "破损、短少、错发、承运商未揽收"],
+        perms: [
+          ["数据范围", "本仓、当班、负责客户"],
+          ["可见字段", "作业、人效、库容、异常"],
+          ["可操作", "调整波次、登记异常、升级告警"]
+        ],
+        bars: [["收货完成", 82], ["上架 SLA", 94], ["拣配完成", 88], ["尾程交接", 96]]
+      },
+      cluster: {
+        name: "仓群总监",
+        scope: "多仓网络",
+        title: "仓群总监仓网运营看板",
+        subtitle: "比较多仓产能、SLA、人效和跨仓资源调度。",
+        question: "多仓是否均衡，哪里需要调拨或限流？",
+        kpis: [
+          ["仓群出库 SLA", 97.1, "%", "good"],
+          ["亏损利润中心", 2, "个", "bad"],
+          ["跨仓缺货 SKU", 146, "个", "warn"],
+          ["Top仓收入", 5.36, "M$", "good"]
+        ],
+        focus: ["各仓库容、人效、异常率横向对比", "未来 7/14/30 天容量预测", "客户库存分布与跨仓调拨建议", "临时人力、班次和入库预约协调"],
+        perms: [
+          ["数据范围", "指定仓群/区域"],
+          ["可见字段", "仓级成本、SLA、人效"],
+          ["可操作", "跨仓调度建议、重大异常升级"]
+        ],
+        bars: [["美西 LA 仓群", 91], ["美东 NJ 仓群", 76], ["萨瓦纳仓", 89], ["自营车队", 64]]
+      },
+      operations: {
+        name: "运营总监",
+        scope: "端到端履约",
+        title: "运营总监全链路控制塔",
+        subtitle: "监控头程、清关、仓内、尾程、退货和客户 SLA。",
+        question: "服务承诺是否稳定，哪些链路正在破坏 SLA？",
+        kpis: [
+          ["端到端准时率", 94.7, "%", "warn"],
+          ["物流收入", 34.37, "M$", "warn"],
+          ["物流订单环比", -6.2, "%", "bad"],
+          ["P1 事故", 2, "个", "bad"]
+        ],
+        focus: ["头程、清关、仓内、尾程的实时断点", "客户 SLA 热力图和风险客户排行", "承运商延误、重派、赔付和异常件", "事故指挥台与跨部门行动闭环"],
+        perms: [
+          ["数据范围", "全业务运营链路"],
+          ["可见字段", "客户 SLA、运输、清关、成本汇总"],
+          ["可操作", "建立事故、调整服务优先级"]
+        ],
+        bars: [["头程 ETA", 92], ["清关释放", 87], ["仓内履约", 96], ["尾程签收", 95]]
+      },
+      finance: {
+        name: "财务总监",
+        scope: "利润现金",
+        title: "财务总监利润与现金看板",
+        subtitle: "追踪收入、成本、毛利、未开票、应收和漏计费。",
+        question: "业务增长是否转化为利润和现金？",
+        kpis: [
+          ["本月收入", 58.09, "M$", "warn"],
+          ["综合毛利率", 8.64, "%", "bad"],
+          ["净利润", 0.139, "M$", "bad"],
+          ["销售减免", 1.59, "M$", "bad"]
+        ],
+        focus: ["收入、成本、毛利和单票利润", "未开票、漏计费、账单争议", "应收账龄、信用额度和现金回款", "客户、渠道、仓库、服务项贡献毛利"],
+        perms: [
+          ["数据范围", "全公司财务与业务明细"],
+          ["可见字段", "合同价、成本价、毛利、应收"],
+          ["可操作", "账单复核、信用预警、费用锁定"]
+        ],
+        bars: [["操作费毛利", 22], ["仓储费毛利", 31], ["尾程毛利", 12], ["头程毛利", 16]]
+      },
+      channel: {
+        name: "渠道总监",
+        scope: "客户增长",
+        title: "渠道总监客户与产品线看板",
+        subtitle: "洞察客户增长、渠道贡献、容量售卖和客户健康。",
+        question: "哪些渠道和客户值得继续投入？",
+        kpis: [
+          ["FBM收入", 47.39, "M$", "warn"],
+          ["Temu收入", 2.74, "M$", "good"],
+          ["TK环比增长", 21.4, "%", "good"],
+          ["流失风险客户", 17, "家", "warn"]
+        ],
+        focus: ["渠道收入、客户新增和续约风险", "客户健康分、投诉与服务体验", "价格折扣、容量预留和贡献毛利", "海外仓、退货、头程、清关产品组合"],
+        perms: [
+          ["数据范围", "客户、渠道、产品线"],
+          ["可见字段", "收入、贡献毛利、SLA"],
+          ["可操作", "客户分层、续约处理、容量申请"]
+        ],
+        bars: [["平台卖家", 88], ["独立站客户", 73], ["品牌出海", 69], ["退货服务", 58]]
+      },
+      ceo: {
+        name: "CEO",
+        scope: "全局经营",
+        title: "CEO 经营驾驶舱",
+        subtitle: "一屏看增长、利润、交付、现金、风险和仓网扩张确定性。",
+        question: "西邮物流是否增长、赚钱、稳定交付，并具备仓网扩张确定性？",
+        kpis: [
+          ["月收入", 58.09, "M$", "warn"],
+          ["预算达成率", 84.3, "%", "warn"],
+          ["净利润率", 0.24, "%", "bad"],
+          ["关键红灯", 4, "项", "bad"]
+        ],
+        focus: ["增长、利润、交付、现金四个经营红绿灯", "仓网容量和扩仓 ROI", "Top 客户贡献与 Top 风险客户", "政策、清关、尾程和账期重大风险"],
+        perms: [
+          ["数据范围", "全局"],
+          ["可见字段", "全部字段，默认经营摘要"],
+          ["可操作", "战略目标确认、预算审批、风险升级"]
+        ],
+        bars: [["增长", 86], ["利润", 74], ["交付", 95], ["现金", 68]]
+      }
+    };
+
+    const modules = [
+      ["global", "全局驾驶舱", "CEO 总览、经营红黄绿灯、今日关键风险", 3],
+      ["network", "仓网地图", "美国多仓节点、仓群对比和容量预测", 2],
+      ["inbound", "入库作业", "预约、到柜、卸柜、收货、上架", 5],
+      ["inventory", "库存管理", "准确率、库龄、滞销、缺货、库位热力", 4],
+      ["outbound", "出库履约", "订单池、波次、拣配、包装、交接", 6],
+      ["customs", "运输清关", "头程、清关、查验、拖车、异常", 4],
+      ["lastmile", "尾程渠道", "承运商 SLA、成本、异常件、签收", 3],
+      ["customers", "客户渠道", "客户健康、渠道收入、增长、流失风险", 4],
+      ["finance", "财务利润", "收入、成本、毛利、应收、漏计费", 5],
+      ["risk", "风险预警", "SLA、库容、清关、政策、现金、客户", 7],
+      ["meeting", "会议包", "日运营会、周经营会、月度董事会", 1]
+    ];
+
+    const reportData = {
+      month: "2026年5月",
+      revenue: 58.09,
+      budgetRate: 84.3,
+      grossMargin: 8.64,
+      netProfit: 0.139,
+      netMargin: 0.24,
+      normalizedProfit: 0.805,
+      oTiDiscount: 0.680,
+      warehouseRentDiscount: 0.518,
+      logisticsDiscount: 0.160,
+      nj5IdleRent: 0.290,
+      operationsCostRate: 7.23,
+      expenseRate: 1.10,
+      logisticsOrderDrop: -6.2,
+      logisticsRevenueDrop: -0.905,
+      fedexPriceImpact: -0.140,
+      mix: [
+        ["FBM", 47.39, "var(--blue)"],
+        ["头程", 5.34, "var(--teal)"],
+        ["Temu认证仓", 2.74, "var(--amber)"],
+        ["TK认证仓", 1.85, "var(--red)"],
+        ["PDD退货/集货", 0.77, "#697586"]
+      ],
+      warehouseCenters: [
+        { code: "WPPA2-3363", region: "美东", revenue: 5.36, profit: 0.706, sla: 98.2, capacity: 78, status: "good" },
+        { code: "WPNJ7-3280", region: "美东 NJ", revenue: 4.83, profit: 0.569, sla: 97.6, capacity: 83, status: "good" },
+        { code: "WPLA15-13277", region: "美西", revenue: 4.49, profit: 0.674, sla: 96.8, capacity: 88, status: "warn" },
+        { code: "WPLA11-7776", region: "美西", revenue: 4.33, profit: 0.543, sla: 96.1, capacity: 91, status: "warn" },
+        { code: "WPLA16-1979", region: "美西", revenue: 3.95, profit: -0.551, sla: 94.2, capacity: 93, status: "bad" },
+        { code: "WPGA5-302", region: "美中南", revenue: 3.01, profit: 0.287, sla: 97.1, capacity: 76, status: "good" },
+        { code: "WPHOU4-14402", region: "休斯顿", revenue: 2.22, profit: 0.298, sla: 96.5, capacity: 81, status: "good" },
+        { code: "WPCHI3-100", region: "芝加哥", revenue: 0.85, profit: -0.449, sla: 92.8, capacity: 72, status: "bad" }
+      ]
+    };
+
+    const companyFacts = [
+      ["官网", "www.wpglb.com"],
+      ["定位", "欧美中大件物流及海外仓"],
+      ["仓网", "20+ 自营海外仓"],
+      ["面积", "900W+ 平方英尺"],
+      ["车队", "40+ 自营卡车"],
+      ["系统", "OMS/WMS/TMS/DMS"]
+    ];
+
+    const financeDiagnostics = {
+      cards: [
+        ["利润被异常事项吞噬", "净利润 $0.139M，剔除 OTI01 减免、NJ5 转租假设等后，税前利润可还原到约 $0.805M。"],
+        ["仓储线是最大问题源", "仓储毛利率 -32.12%，显著低于预算 8.06% 和行业对标线，主要看仓租减免与空置租金。"],
+        ["操作线相对健康", "操作毛利率 24.76%，接近标杆区间，但仍低于预算 27.89%，应继续看人效和返工。"],
+        ["物流收入下滑需拆因", "物流收入环比 -$0.905M，关联订单量 -6.2%、补收减少和 FedEx-Ground 报价调整。"]
+      ],
+      rows: [
+        ["营业收入", "$58.09M", "$68.87M", "预算达成 84.3%", "不设单一行业线", "预算差 -$10.78M", "收入规模未达预算，优先按 FBM、头程、Temu/TK、客户分层拆解。", "warn"],
+        ["净利润率", "0.24%", "3.37%", "3.0%", "5.0%+", "-2.76pct vs 行业均值", "利润率显著偏低，必须把异常减免和仓储负毛利单列。", "bad"],
+        ["综合营业毛利率", "8.64%", "12.19%", "12.0%", "16.0%+", "-3.36pct vs 行业均值", "营业成本吞噬毛利，问题集中在仓储成本、减免和物流价格。", "bad"],
+        ["仓储毛利率", "-32.12%", "8.06%", "8.0%", "15.0%+", "-40.12pct vs 行业均值", "第一红灯：OTI01 仓租减免、NJ5 空置租金、仓网利用率需逐仓追责。", "bad"],
+        ["操作毛利率", "24.76%", "27.89%", "20.0%", "28.0%+", "+4.76pct vs 行业均值", "操作业务健康但低于预算，应继续优化人效、波次、返工率。", "good"],
+        ["物流毛利率（含减免索赔）", "11.27%", "6.86%", "10.0%", "14.0%+", "+1.27pct vs 行业均值", "水平尚可但环比下滑，需看补收减少、报价下调和承运商成本。", "warn"],
+        ["运营成本率", "7.23%", "6.77%", "7.5%", "6.5%以下", "+0.73pct vs 标杆", "行业合理但高于预算和标杆，需看仓库运营成本、耗材、临时工。", "warn"],
+        ["费用率", "1.10%", "1.51%", "1.5%", "1.2%以下", "优于预算", "费用率暂不构成主要矛盾，需持续监控财务费用和管理费用。", "good"],
+        ["销售减免率", "2.73%", "1.51%", "1.0%", "0.5%以下", "+1.73pct vs 行业均值", "第二红灯：销售减免过高，需建立客户/仓库/服务项审批红线。", "bad"]
+      ],
+      sources: [
+        ["公司能力口径", "西邮物流 WP Global 官网", "https://www.wpglb.com/"],
+        ["行业利润率参考", "NYU Stern Damodaran Margins by Sector", "https://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/margin.html"],
+        ["公开同业样本", "FedEx Annual Reports", "https://investors.fedex.com/financial-information/annual-reports/default.aspx"]
+      ],
+      note: "行业平均和标杆为物流/海外仓经营管理对标线，用于问题定位；正式上线前应按西邮物流目标市场、客户结构、大件比例、仓租结构和公开同业样本重新校准。"
+    };
+
+    const roleBriefs = {
+      ceo: {
+        title: "CEO 首页经营摘要",
+        subtitle: "参考 2026 年 5 月管报：收入规模仍在，但利润被 OTI01 减免、仓租压力和物流收入下滑明显压低。",
+        callouts: [["营业收入", "$58.09M"], ["预算达成", "84.3%"], ["净利润率", "0.24%"]],
+        thesis: "本月核心不是规模问题，而是利润质量问题。剔除 OTI01 减免和若干非常规事项后，税前利润可还原到约 $0.805M。",
+        bridge: [["净利润", 0.139], ["OTI01减免", 0.680], ["NJ5转租假设", 0.265], ["非常规调整", -0.279], ["还原利润", 0.805]],
+        warehouseLimit: 6
+      },
+      warehouse: {
+        title: "仓库经理首页摘要",
+        subtitle: "首页只看本仓执行风险：库容、出库 SLA、异常返工和仓租/操作毛利对利润的拖累。",
+        callouts: [["仓储毛利率", "-32.1%"], ["操作毛利率", "24.8%"], ["库容红灯", "2 仓"]],
+        thesis: "仓储端压力集中在销售减免、空置租金和库容利用。仓库经理不需要看全公司利润细账，但需要看到本仓动作对毛利的影响。",
+        bridge: [["仓租收入", 6.51], ["仓储成本", -8.40], ["仓租减免", -0.562], ["NJ5闲置", -0.290], ["仓储毛利", -2.09]],
+        warehouseLimit: 6
+      },
+      cluster: {
+        title: "仓群总监首页摘要",
+        subtitle: "按利润中心看仓群健康：收入排名、经营利润、库容预测和跨仓调度优先级。",
+        callouts: [["Top仓收入", "$5.36M"], ["亏损仓", "2 个"], ["跨仓建议", "28 条"]],
+        thesis: "WPLA16 与 WPCHI3 需要优先治理，WPNJ7、WPPA2、WPLA15 是收入和利润承载仓，应优先保障容量。",
+        bridge: [["盈利仓贡献", 3.08], ["亏损仓拖累", -1.00], ["集团公摊", -0.53], ["临时人力", -0.18], ["仓群净贡献", 1.37]],
+        warehouseLimit: 8
+      },
+      operations: {
+        title: "运营总监首页摘要",
+        subtitle: "把管报波动翻译成运营动作：物流收入下降、订单量下降、价格调整、清关/尾程异常。",
+        callouts: [["物流收入环比", "-$0.91M"], ["物流订单量", "-6.2%"], ["端到端 SLA", "94.7%"]],
+        thesis: "5 月物流收入环比下降主要来自订单量下降、补收减少和 FedEx-Ground 报价下调。运营首页应优先显示尾程渠道和客户 SLA。",
+        bridge: [["4月物流收入", 35.27], ["订单量下降", -0.62], ["补收减少", -0.619], ["价格调整", -0.140], ["5月物流收入", 34.37]],
+        warehouseLimit: 6
+      },
+      finance: {
+        title: "财务总监首页摘要",
+        subtitle: "聚焦利润还原、预算达成、销售减免、仓租成本、未开票和毛利异常。",
+        callouts: [["净利润", "$0.139M"], ["还原税前", "$0.805M"], ["销售减免", "-$1.588M"]],
+        thesis: "财务首页要把真实利润、还原利润和异常事项拆开，避免经营层只看到 0.24% 净利率却不知道主要拖累项。",
+        bridge: [["实际税前利润", 0.139], ["OTI01减免", 0.680], ["叉车处置调整", -0.111], ["CHI3补贴调整", -0.245], ["还原税前利润", 0.805]],
+        warehouseLimit: 6
+      },
+      channel: {
+        title: "渠道总监首页摘要",
+        subtitle: "看客户和产品线：FBM 仍是主体，Temu 认证仓超预算但仓储收入未达预期，TK 操作增长较快。",
+        callouts: [["FBM收入", "$47.39M"], ["Temu收入", "$2.74M"], ["TK收入环比", "+21.4%"]],
+        thesis: "渠道首页要把收入、毛利、SLA 和容量放在一起，避免只追规模而把低毛利客户推向爆仓仓点。",
+        bridge: [["FBM", 47.39], ["头程", 5.34], ["Temu", 2.74], ["TK", 1.85], ["PDD/集货", 0.77]],
+        warehouseLimit: 5
+      }
+    };
+
+    const moduleCards = {
+      global: [
+        ["经营红绿灯", "增长、利润、交付、现金和风险五类灯号。", "3 红灯"],
+        ["今日影响面", "P1/P2 事故影响订单、客户和承运商。", "1,248 单"],
+        ["本周行动", "每个红灯指标绑定 owner、ETA 和恢复动作。", "12 项"]
+      ],
+      network: [
+        ["容量预测", "按入库预约、销售预测和退货量滚动预测。", "7 天"],
+        ["仓群对比", "SLA、人效、成本、异常四象限排行。", "3 仓"],
+        ["跨仓建议", "识别缺货 SKU 和空余库容。", "28 条"]
+      ],
+      inbound: [
+        ["到柜预约", "到港、约仓、卸柜等待和文件状态。", "41 柜"],
+        ["收货队列", "ASN、短少、破损和异常待确认。", "326 票"],
+        ["上架时效", "收货完成到可售库存的 SLA。", "93.8%"]
+      ],
+      inventory: [
+        ["库存准确率", "盘点差异、冻结库存和可售库存偏差。", "99.21%"],
+        ["库龄风险", "按客户、SKU、库区识别滞销与占仓费机会。", "18.4K 件"],
+        ["缺货预警", "高优 SKU 的跨仓缺货与补货建议。", "146 SKU"]
+      ],
+      outbound: [
+        ["订单池", "截单前风险订单、加急订单和客户优先级。", "8.6K 单"],
+        ["波次执行", "拣货、复核、包装、贴单和交接进度。", "88%"],
+        ["错发返工", "错拣、漏拣、破损、标签异常。", "0.42%"]
+      ],
+      customs: [
+        ["头程 ETA", "海运、空运、拖车节点和延误预测。", "92%"],
+        ["清关滞留", "查验、资料缺失、税费待确认。", "11 票"],
+        ["政策风险", "对小包、关税和申报模式变化做影响标记。", "2 项"]
+      ],
+      lastmile: [
+        ["承运商 SLA", "UPS/FedEx/USPS/区域承运商时效和异常。", "96.8%"],
+        ["尾程成本", "运费、附加费、偏远费和赔付。", "$3.42/单"],
+        ["异常签收", "丢件、拒收、地址错误、重派。", "214 单"]
+      ],
+      customers: [
+        ["客户健康分", "收入、毛利、SLA、投诉和库存质量。", "82/100"],
+        ["渠道增长", "平台卖家、独立站、品牌出海产品组合。", "+21.4%"],
+        ["流失风险", "活跃下降、投诉增加和毛利下滑客户。", "17 家"]
+      ],
+      finance: [
+        ["利润总览", "净利润、还原利润、预算达成和同比/环比。", "$0.139M"],
+        ["收入成本", "服务项收入到毛利瀑布拆解。", "$58.09M"],
+        ["毛利减免", "仓储、操作、物流毛利率与销售减免。", "-$1.59M"]
+      ],
+      risk: [
+        ["SLA 风险", "出库、清关、尾程任一环节破线即告警。", "7 项"],
+        ["库容风险", "未来 7 天预测超过阈值。", "2 仓"],
+        ["财务风险", "漏计费、毛利异常、账期超限。", "5 项"]
+      ],
+      meeting: [
+        ["日运营会", "自动汇总昨日异常、今日风险和待决策。", "09:30"],
+        ["周经营会", "按客户、仓、渠道、财务产出复盘包。", "周一"],
+        ["董事会视图", "增长、利润、现金、风险和扩仓 ROI。", "月度"]
+      ],
+      permissions: [
+        ["页面级权限", "控制角色能进入的目录和二级页面。", "12 类"],
+        ["字段级脱敏", "合同价、成本价、员工绩效、折扣价。", "敏感"],
+        ["操作审计", "阈值修改、告警关闭、敏感数据访问留痕。", "实时"]
+      ],
+      quality: [
+        ["接口延迟", "WMS、TMS、FMS、CRM 的最后同步时间。", "18 秒"],
+        ["缺失率", "订单、成本、轨迹关键字段完整性。", "0.8%"],
+        ["指标血缘", "每个 KPI 可追溯系统、表、字段和口径。", "可追溯"]
+      ]
+    };
+
+    const moduleDetails = {
+      global: {
+        headline: "CEO / 经营层每日第一屏",
+        desc: "把增长、利润、交付、现金和重大风险压缩成一张实时经营红黄绿灯，适合日会开场和突发事件指挥。",
+        tags: ["CEO", "运营总监", "财务总监", "5-60 秒刷新"],
+        metrics: [["预算达成率", "84.3%"], ["综合毛利率", "8.64%"], ["准时履约", "95.4%"]],
+        pages: [["经营红黄绿灯", "增长、利润、交付、现金、风险五类状态。"], ["今日关键风险", "P1/P2 事故、影响客户、预计恢复时间。"], ["管理层行动清单", "每个红灯指标绑定 owner、ETA 和动作记录。"]],
+        flow: [["订单", "OMS 实时"], ["头程", "TMS/货代"], ["清关", "清关行"], ["仓内", "WMS 扫码"], ["财务", "FMS/ERP"]],
+        actions: [["清关 P1 事故复盘", "运营总监 16:30 前给出恢复方案。"], ["萨瓦纳仓限流", "仓群总监确认低毛利客户入库节奏。"], ["漏计费复核", "财务总监锁定增值服务缺口。"]]
+      },
+      network: {
+        headline: "美国多仓仓网地图",
+        desc: "看美西 LA、美东 NJ、萨瓦纳、休斯顿、芝加哥等仓群的库容、人效、吞吐、未来入库预测，并给出跨仓调拨建议。",
+        tags: ["仓群总监", "CEO", "运营总监", "1-5 分钟刷新"],
+        metrics: [["平均库容", "84.2%"], ["预测满仓", "2 仓"], ["调拨建议", "28 条"]],
+        pages: [["仓网地图", "按仓库展示库容、出库 SLA、异常和成本。"], ["容量预测", "未来 7/14/30 天入库、退货、出库趋势。"], ["跨仓调拨", "识别缺货 SKU、空余库位和调拨收益。"]],
+        flow: [["预约", "入库计划"], ["库存", "可售/冻结"], ["产能", "人效/班次"], ["成本", "单票作业"], ["建议", "调拨/限流"]],
+        actions: [["萨瓦纳仓爆仓预案", "将低周转 SKU 分流到美东 NJ 仓群。"], ["美西 LA 高峰班次", "根据 14:00 波次积压追加临时人力。"], ["空仓资源售卖", "渠道团队优先销售美东可用容量。"]]
+      },
+      inbound: {
+        headline: "入库作业详情",
+        desc: "从客户预约、到港、到柜、卸柜、收货、异常确认到上架可售，追踪每一票入仓 SLA。",
+        tags: ["仓库经理", "仓群总监", "30 秒刷新"],
+        metrics: [["今日到柜", "41 柜"], ["收货异常", "326 票"], ["上架 SLA", "93.8%"]],
+        pages: [["预约日历", "按客户、仓库、柜号展示预约与到港 ETA。"], ["卸柜队列", "等待时长、码头/拖车异常和优先级。"], ["上架追踪", "收货完成到可售库存的时长和责任班组。"]],
+        flow: [["预约", "ASN"], ["到柜", "ETA"], ["卸柜", "Dock"], ["收货", "Scan"], ["上架", "Available"]],
+        actions: [["ASN 异常清理", "客户资料缺失集中 3 家，客服当天补齐。"], ["卸柜排班调整", "美西 LA 仓群 16:00 前释放 2 个 dock。"], ["上架超时跟踪", "超过 4 小时未上架 SKU 自动告警。"]]
+      },
+      inventory: {
+        headline: "库存管理详情",
+        desc: "把库存准确率、库龄、滞销、缺货、冻结库存和库位热力合在一起，支持仓内动作和渠道销售判断。",
+        tags: ["仓库经理", "渠道总监", "运营总监", "1 分钟刷新"],
+        metrics: [["库存准确率", "99.21%"], ["滞销库存", "18.4K 件"], ["缺货 SKU", "146 个"]],
+        pages: [["SKU 健康", "可售、冻结、缺货、滞销、库龄。"], ["库位热力", "拥堵通道、爆仓区域和低效库区。"], ["客户库存风险", "客户库存质量、占仓费机会和补货建议。"]],
+        flow: [["入库", "收货"], ["上架", "库位"], ["可售", "库存"], ["冻结", "异常"], ["出库", "扣减"]],
+        actions: [["滞销客户沟通", "渠道总监推动 30 天以上库存处理。"], ["高优 SKU 补货", "运营总监协调空运补货池。"], ["盘点差异复核", "仓库经理安排晚班抽盘。"]]
+      },
+      outbound: {
+        headline: "出库履约详情",
+        desc: "覆盖订单池、截单风险、波次、拣配、复核、包装、贴单、承运商交接，实时判断能否准时出库。",
+        tags: ["仓库经理", "运营总监", "5-30 秒刷新"],
+        metrics: [["订单池", "8.6K 单"], ["波次完成", "88%"], ["错发返工", "0.42%"]],
+        pages: [["订单池", "客户优先级、截单时间、加急和异常订单。"], ["波次看板", "每个波次的任务量、进度、积压和人效。"], ["交接确认", "包装、贴单、装车、承运商揽收扫描。"]],
+        flow: [["接单", "OMS"], ["波次", "WMS"], ["拣货", "PDA"], ["包装", "Label"], ["交接", "Carrier"]],
+        actions: [["截单风险处理", "14:00 前 612 单进入拣货波次。"], ["错发原因复盘", "按 SKU、人员、库区定位返工来源。"], ["承运商未揽收", "超过 30 分钟未扫描自动升级。"]]
+      },
+      customs: {
+        headline: "运输清关详情",
+        desc: "从中国集货、头程、港口、清关、查验、税费确认到拖车入仓，监控跨境链路的不确定性。",
+        tags: ["运营总监", "CEO", "5-30 分钟刷新"],
+        metrics: [["在途柜量", "126 柜"], ["清关滞留", "11 票"], ["查验率", "4.6%"]],
+        pages: [["头程 ETA", "海运、空运、拖车节点和延误预测。"], ["清关状态", "资料缺失、查验、税费、放行和滞留时长。"], ["政策风险", "关税、小包、申报模式变化的客户影响面。"]],
+        flow: [["集货", "深圳"], ["头程", "海/空运"], ["港口", "Arrive"], ["清关", "CBP"], ["拖车", "入仓"]],
+        actions: [["清关资料补齐", "11 票资料缺失，运营总监协调客户补件。"], ["查验率异常", "按客户和品类拆解申报风险。"], ["政策影响评估", "对低货值包裹模式变化设置客户标签。"]]
+      },
+      lastmile: {
+        headline: "尾程渠道详情",
+        desc: "监控 UPS、FedEx、USPS 和区域承运商的时效、成本、异常件、重派、赔付和签收质量。",
+        tags: ["运营总监", "渠道总监", "1-5 分钟刷新"],
+        metrics: [["尾程准时", "96.8%"], ["单票成本", "$3.42"], ["异常签收", "214 单"]],
+        pages: [["承运商 SLA", "按承运商、区域、服务等级比较准时率。"], ["成本异常", "偏远费、燃油费、重派费和赔付。"], ["异常件追踪", "丢件、拒收、地址错误、未揽收。"]],
+        flow: [["出库", "Manifest"], ["揽收", "Pickup"], ["中转", "Transit"], ["派送", "Out"], ["签收", "Delivered"]],
+        actions: [["承运商 A 降速", "运营总监评估是否切换区域承运商。"], ["地址错误治理", "渠道团队推动客户前置校验。"], ["赔付追踪", "财务总监按承运商账单核销。"]]
+      },
+      customers: {
+        headline: "客户渠道详情",
+        desc: "把收入增长、客户健康、产品线使用、容量预留、价格折扣和流失风险放到同一张渠道经营图。",
+        tags: ["渠道总监", "CEO", "财务总监", "15-60 分钟刷新"],
+        metrics: [["活跃客户", "286 家"], ["收入增速", "+21.4%"], ["流失风险", "17 家"]],
+        pages: [["客户健康分", "收入、毛利、SLA、投诉、库存质量综合评分。"], ["渠道收入", "平台卖家、独立站、品牌出海、退货服务。"], ["容量售卖", "可售库容、客户预留、限流建议。"]],
+        flow: [["线索", "CRM"], ["报价", "合同"], ["入仓", "WMS"], ["履约", "SLA"], ["续约", "健康分"]],
+        actions: [["Top 客户续约", "渠道总监跟进 5 家高收入客户 SLA 体验。"], ["低毛利客户治理", "财务和渠道共同调整价格策略。"], ["容量预留复核", "避免高毛利客户被爆仓挤出。"]]
+      },
+      finance: {
+        headline: "财务利润详情",
+        desc: "从管报利润出发，串联收入、成本、毛利、减免、异常还原、利润中心、未开票、账单争议和应收账龄。",
+        tags: ["财务总监", "CEO", "5-15 分钟/T+1 校验"],
+        metrics: [["本月收入", "$58.09M"], ["净利率", "0.24%"], ["还原税前", "$0.805M"]],
+        pages: [["利润诊断", "实际、预算、行业平均、标杆和差距。"], ["毛利减免", "仓储、操作、物流毛利与 OTI01 减免。"], ["利润中心", "仓库代码、区域、业务线的利润定位。"]],
+        flow: [["服务", "WMS/TMS"], ["计费", "Billing"], ["发票", "Invoice"], ["应收", "AR"], ["回款", "Cash"]],
+        actions: [["增值服务漏计费", "财务总监复核退货处理和贴标费。"], ["低毛利订单", "按客户和承运商拆解单票成本。"], ["逾期客户冻结", "超过信用额度客户需审批后继续履约。"]]
+      },
+      risk: {
+        headline: "风险预警详情",
+        desc: "统一管理 SLA、库容、清关、政策、尾程、毛利、现金和客户流失风险，形成实时告警和处置闭环。",
+        tags: ["全管理层", "实时推送", "WebSocket/SSE"],
+        metrics: [["P1 风险", "2 项"], ["P2 风险", "7 项"], ["平均关闭", "4.6h"]],
+        pages: [["告警中心", "按等级、角色、仓库、客户和链路过滤。"], ["规则管理", "阈值、接收人、升级路径和静默窗口。"], ["处置复盘", "原因、动作、恢复时间和复发率。"]],
+        flow: [["采集", "Event"], ["规则", "Rule"], ["通知", "Alert"], ["处置", "Owner"], ["复盘", "RCA"]],
+        actions: [["P1 清关风险", "超过 12 小时自动升级运营总监。"], ["爆仓风险", "未来 7 天超过 92% 推送仓群总监。"], ["毛利异常", "低于合同阈值推送财务和渠道。"]]
+      },
+      meeting: {
+        headline: "会议包详情",
+        desc: "把实时看板自动沉淀成日运营会、周经营会和月度董事会材料，减少人工拉数和口径争议。",
+        tags: ["全管理层", "自动生成", "按会前刷新"],
+        metrics: [["日会事项", "12 项"], ["周会主题", "8 个"], ["董事会指标", "24 个"]],
+        pages: [["日运营会", "昨日异常、今日风险、需要协调的资源。"], ["周经营会", "客户、仓、渠道、财务、SLA 复盘。"], ["月度董事会", "增长、利润、现金、风险、扩仓 ROI。"]],
+        flow: [["取数", "指标层"], ["归因", "异常"], ["行动", "Owner"], ["纪要", "会议包"], ["追踪", "闭环"]],
+        actions: [["日会自动推送", "每天 09:00 生成管理层待办。"], ["周会口径冻结", "周一 08:30 锁定上周指标。"], ["月报导出", "CEO 视图保留战略摘要和风险清单。"]]
+      },
+      permissions: {
+        headline: "角色与权限管理详情",
+        desc: "用页面级、指标级、字段级、数据范围和操作权限控制不同角色看到什么、能做什么，并全程审计。",
+        tags: ["系统管理", "CEO 授权", "RBAC/ABAC"],
+        metrics: [["角色", "6 类"], ["权限层级", "5 层"], ["审计", "实时"]],
+        pages: [["角色配置", "仓库经理、仓群总监、运营、财务、渠道、CEO。"], ["字段脱敏", "合同价、成本价、员工绩效、承运商折扣。"], ["操作审计", "查看敏感字段、关闭告警、修改阈值留痕。"]],
+        flow: [["身份", "SSO"], ["角色", "RBAC"], ["范围", "仓/客户"], ["字段", "Mask"], ["审计", "Log"]],
+        actions: [["财务字段脱敏", "非财务角色默认隐藏合同价和成本价。"], ["仓库范围控制", "仓库经理只能看本仓和授权客户。"], ["阈值修改审批", "告警规则变更需记录审批人。"]]
+      },
+      quality: {
+        headline: "数据质量管理详情",
+        desc: "每个看板必须显示数据新鲜度、接口延迟、字段缺失率和指标血缘，避免漂亮但不可信。",
+        tags: ["系统管理", "数据团队", "实时监控"],
+        metrics: [["接口延迟", "18 秒"], ["字段缺失", "0.8%"], ["血缘覆盖", "96%"]],
+        pages: [["同步监控", "WMS/TMS/FMS/CRM 最后同步时间。"], ["字段完整性", "订单、成本、轨迹、客户关键字段缺失率。"], ["指标血缘", "KPI 口径、来源系统、表和字段。"]],
+        flow: [["源系统", "API/CDC"], ["队列", "Stream"], ["指标", "Metric"], ["看板", "BI"], ["告警", "DQ"]],
+        actions: [["TMS 延迟告警", "超过 5 分钟未同步推送运营。"], ["成本字段缺失", "影响毛利计算时标红财务页。"], ["指标口径变更", "需版本化并通知所有角色。"]]
+      }
+    };
+
+    const pageArchitecture = {
+      global: [
+        { page: "CEO 总览", owner: "CEO / 战略运营", chart: "经营四象限 + 利润桥", action: "确认本周红灯事项优先级", drills: ["收入预算达成", "净利润与还原利润", "现金/应收风险", "Top 客户贡献", "Top 事故影响面"] },
+        { page: "经营红黄绿灯", owner: "CEO / 各中心负责人", chart: "红黄绿灯矩阵", action: "按红灯自动生成 owner 任务", drills: ["增长灯", "利润灯", "交付灯", "现金灯", "政策/清关风险灯"] },
+        { page: "管理层行动清单", owner: "CEO 办 / PMO", chart: "事项看板 + ETA 时间轴", action: "追踪每个事项的关闭时间", drills: ["P0/P1 事项", "跨部门阻塞", "影响客户清单", "恢复 ETA", "复盘结论"] }
+      ],
+      network: [
+        { page: "仓网地图", owner: "仓群总监", chart: "美国仓点地图 + 利润中心热力", action: "识别爆仓/亏损/高贡献仓", drills: ["WPLA 仓群", "WPNJ 仓群", "WPGA/WPHOU 仓群", "合作仓/不占仓", "海外非美国节点"] },
+        { page: "容量预测", owner: "仓群总监 / 运营计划", chart: "7/14/30 天容量曲线", action: "提前限流或临时扩容", drills: ["入库预约预测", "出库消耗预测", "退货回流预测", "库容红线预测", "人力缺口预测"] },
+        { page: "跨仓调拨", owner: "仓群总监 / 渠道总监", chart: "调拨收益矩阵", action: "平衡 SLA、成本和库容", drills: ["缺货 SKU", "滞销 SKU", "空余库位", "调拨成本", "客户承诺影响"] }
+      ],
+      inbound: [
+        { page: "预约与到柜", owner: "仓库经理", chart: "预约日历 + 到柜漏斗", action: "调整 dock 和卸柜优先级", drills: ["客户预约", "柜号/提单", "ETA 偏差", "拖车状态", "资料缺失"] },
+        { page: "卸柜收货", owner: "仓库经理 / 班组长", chart: "队列甘特图", action: "压缩等待时长和异常返工", drills: ["等待时长", "卸柜效率", "短少破损", "ASN 差异", "班组人效"] },
+        { page: "上架可售", owner: "仓库经理", chart: "收货到可售 SLA 曲线", action: "保障高优 SKU 可售", drills: ["上架超时", "库位推荐", "冻结库存", "可售转化", "异常责任人"] }
+      ],
+      inventory: [
+        { page: "SKU 健康", owner: "仓库经理 / 渠道总监", chart: "SKU 风险矩阵", action: "识别缺货、滞销和冻结", drills: ["可售库存", "冻结库存", "缺货风险", "高优 SKU", "客户库存分布"] },
+        { page: "库位热力", owner: "仓库经理", chart: "库区热力图", action: "优化库位和动线", drills: ["通道拥堵", "高频拣货区", "低效库位", "异常库区", "盘点差异"] },
+        { page: "库龄与占仓", owner: "渠道总监 / 财务总监", chart: "库龄分层堆叠图", action: "推动占仓费和滞销处理", drills: ["0-30 天", "30-90 天", "90-180 天", "180 天以上", "占仓费机会"] }
+      ],
+      outbound: [
+        { page: "订单池", owner: "仓库经理 / 运营总监", chart: "截单风险漏斗", action: "提前识别延误订单", drills: ["客户优先级", "截单倒计时", "加急订单", "异常订单", "订单毛利标签"] },
+        { page: "波次执行", owner: "仓库经理 / 班组长", chart: "波次甘特图", action: "动态调人和调波次", drills: ["拣货进度", "复核进度", "包装进度", "返工率", "人效排行"] },
+        { page: "承运交接", owner: "仓库经理 / 尾程运营", chart: "交接扫描时间轴", action: "减少未揽收和错交接", drills: ["Manifest", "装车确认", "揽收扫描", "未交接订单", "承运商异常"] }
+      ],
+      customs: [
+        { page: "头程 ETA", owner: "运营总监 / 头程负责人", chart: "航线/海运时间轴", action: "提前预警延误到仓", drills: ["国内集货", "海运/空运", "港口到达", "拖车预约", "预计入仓"] },
+        { page: "清关状态", owner: "运营总监 / 清关团队", chart: "清关漏斗 + 滞留排行", action: "推动资料补齐和查验处理", drills: ["资料缺失", "查验票", "税费待确认", "放行待拖车", "滞留超时"] },
+        { page: "政策风险", owner: "运营总监 / 合规", chart: "客户影响面矩阵", action: "评估关税和小包政策变化", drills: ["申报模式", "低货值包裹", "敏感品类", "客户清单", "利润影响"] }
+      ],
+      lastmile: [
+        { page: "承运商 SLA", owner: "运营总监", chart: "承运商排行 + 地图热力", action: "动态切换渠道策略", drills: ["FedEx", "UPS", "USPS", "UNIUNI/区域承运", "WP Ground"] },
+        { page: "尾程成本", owner: "财务总监 / 运营总监", chart: "单票成本瀑布", action: "识别附加费和报价偏差", drills: ["基础运费", "住宅附加费", "偏远费", "燃油费", "赔付抵扣"] },
+        { page: "异常与赔付", owner: "运营总监 / 客服", chart: "异常类型 Pareto", action: "降低投诉和赔付", drills: ["丢件", "拒收", "地址错误", "重派", "索赔关闭"] }
+      ],
+      customers: [
+        { page: "客户健康分", owner: "渠道总监", chart: "客户健康矩阵", action: "定位续约和流失风险", drills: ["收入趋势", "毛利趋势", "SLA 体验", "投诉赔付", "库存质量"] },
+        { page: "渠道收入", owner: "渠道总监 / CEO", chart: "产品线收入结构", action: "决定渠道投入和报价策略", drills: ["FBM", "Temu 认证仓", "TK 认证仓", "PDD 退货", "头程/集货"] },
+        { page: "容量售卖", owner: "渠道总监 / 仓群总监", chart: "可售容量地图", action: "把空仓容量卖给高毛利客户", drills: ["仓点可售容量", "客户预留", "限流客户", "高毛利客户", "报价建议"] }
+      ],
+      finance: [
+        { page: "利润诊断总览", owner: "财务总监 / CEO", chart: "实际-预算-行业-标杆对比表", action: "锁定利润偏差主因", drills: ["净利润率", "综合毛利率", "预算达成", "还原利润", "异常事项"] },
+        { page: "收入成本瀑布", owner: "财务总监", chart: "收入到净利润瀑布图", action: "拆解利润被谁吃掉", drills: ["营业收入", "营业成本", "运营成本", "管理费用", "净利润"] },
+        { page: "毛利与减免", owner: "财务总监 / 渠道总监", chart: "毛利率趋势 + 减免明细", action: "还原真实经营质量", drills: ["仓储毛利", "操作毛利", "物流毛利", "OTI01 减免", "异常事项还原"] },
+        { page: "利润中心诊断", owner: "财务总监 / 仓群总监", chart: "利润中心热力 + 亏损排行", action: "定位亏损仓和高贡献仓", drills: ["WPLA", "WPNJ", "WPGA/WPHOU", "WPCHI", "合作仓/不占仓"] },
+        { page: "账单与应收", owner: "财务总监", chart: "账龄漏斗 + 漏计费雷达", action: "减少漏计费和账期风险", drills: ["未开票", "账单争议", "应收账龄", "信用额度", "回款动作"] }
+      ],
+      risk: [
+        { page: "告警中心", owner: "全管理层", chart: "风险等级队列", action: "按 P0/P1/P2 分级处理", drills: ["SLA 风险", "库容风险", "清关风险", "毛利风险", "客户风险"] },
+        { page: "规则管理", owner: "系统管理员 / 业务 owner", chart: "规则覆盖矩阵", action: "配置阈值、接收人和升级路径", drills: ["阈值配置", "接收人", "升级路径", "静默窗口", "规则审计"] },
+        { page: "处置复盘", owner: "PMO / 事故 owner", chart: "RCA 闭环看板", action: "降低复发率", drills: ["原因分类", "处理时长", "恢复证明", "客户补偿", "复发追踪"] }
+      ],
+      meeting: [
+        { page: "日运营会", owner: "运营总监", chart: "昨日异常 + 今日风险", action: "快速定责和调资源", drills: ["昨日红灯", "今日入库", "今日出库", "清关滞留", "待决策事项"] },
+        { page: "周经营会", owner: "CEO / 各中心负责人", chart: "周度经营复盘包", action: "看趋势和跨部门问题", drills: ["收入趋势", "毛利趋势", "客户变化", "仓网容量", "行动完成率"] },
+        { page: "月度董事会", owner: "CEO / 财务总监", chart: "月度管报摘要", action: "解释利润、现金和战略风险", drills: ["管报总览", "利润还原", "扩仓 ROI", "重大客户", "下月预测"] }
+      ],
+      permissions: [
+        { page: "角色配置", owner: "系统管理员", chart: "角色-页面矩阵", action: "配置谁能看哪些目录", drills: ["仓库经理", "仓群总监", "运营总监", "财务总监", "CEO"] },
+        { page: "字段脱敏", owner: "财务总监 / 系统管理员", chart: "敏感字段清单", action: "控制合同价、成本价、员工绩效", drills: ["合同价", "成本价", "毛利", "员工绩效", "承运商折扣"] },
+        { page: "操作审计", owner: "内控 / 系统管理员", chart: "审计日志时间轴", action: "追踪敏感访问和规则变更", drills: ["查看敏感字段", "关闭告警", "修改阈值", "导出数据", "权限变更"] }
+      ],
+      quality: [
+        { page: "同步监控", owner: "数据团队", chart: "接口新鲜度仪表", action: "发现数据延迟", drills: ["WMS", "TMS", "OMS", "FMS/ERP", "CRM"] },
+        { page: "字段完整性", owner: "数据团队 / 业务 owner", chart: "缺失率热力图", action: "避免关键指标失真", drills: ["订单字段", "成本字段", "轨迹字段", "客户字段", "仓库映射"] },
+        { page: "指标血缘", owner: "数据治理", chart: "指标 lineage 图", action: "统一口径和版本", drills: ["指标定义", "来源系统", "计算公式", "变更记录", "口径 owner"] }
+      ]
+    };
+
+    const modulePerspectives = {
+      global: [["CEO", "经营红灯"], ["财务", "利润质量"], ["运营", "事故影响"]],
+      network: [["仓群", "区域仓网"], ["财务", "利润中心"], ["渠道", "可售容量"]],
+      inbound: [["仓库", "现场排班"], ["运营", "到柜风险"], ["客户", "预约质量"]],
+      inventory: [["仓库", "库位/库龄"], ["渠道", "客户库存"], ["财务", "占仓费"]],
+      outbound: [["仓库", "波次执行"], ["运营", "SLA 风险"], ["渠道", "客户承诺"]],
+      customs: [["运营", "头程清关"], ["CEO", "政策风险"], ["渠道", "客户影响"]],
+      lastmile: [["运营", "承运商"], ["财务", "单票成本"], ["渠道", "签收体验"]],
+      customers: [["渠道", "增长续约"], ["财务", "贡献毛利"], ["仓群", "容量占用"]],
+      finance: [["财务", "预算对标"], ["CEO", "利润还原"], ["仓群", "亏损仓"], ["渠道", "减免客户"]],
+      risk: [["管理层", "P0/P1"], ["Owner", "处置闭环"], ["PMO", "复发率"]],
+      meeting: [["日会", "今日动作"], ["周会", "趋势复盘"], ["月会", "战略解释"]],
+      permissions: [["系统", "角色"], ["财务", "敏感字段"], ["内控", "审计"]],
+      quality: [["数据", "新鲜度"], ["业务", "缺失率"], ["管理层", "口径可信"]]
+    };
+
+    const drillSampleValues = {
+      global: ["实际 $58.09M / 预算 84.3%", "净利率 0.24% / 还原 $0.805M", "P1 2 项 / 影响 1,248 单", "Top5 客户 $18.6M", "ETA 4.6h"],
+      network: ["库容 88% / 红线 92%", "SLA 96.4% / 目标 97%", "亏损仓 2 个", "可售 186K ft²", "调拨收益 $42K"],
+      inbound: ["41 柜 / ETA +2h", "326 票异常", "Dock 等待 42min", "ASN 缺失 3 客户", "上架 93.8%"],
+      inventory: ["准确率 99.21%", "滞销 18.4K 件", "冻结 2.7K 件", "缺货 146 SKU", "占仓费机会 $86K"],
+      outbound: ["8.6K 单 / 风险 612", "波次完成 88%", "人效 42 件/h", "返工 0.42%", "未揽收 214 单"],
+      customs: ["在途 126 柜", "滞留 11 票", "查验率 4.6%", "资料缺失 3 客户", "利润影响 $190K"],
+      lastmile: ["准时 96.8%", "$3.42/单", "异常 214 单", "赔付 $38K", "偏远费 +0.7pct"],
+      customers: ["活跃 286 家", "FBM $47.39M", "Temu $2.74M", "流失风险 17 家", "毛利低于线 9 家"],
+      finance: ["实际 0.24% / 标杆 5%+", "毛利 8.64% / 预算 12.19%", "仓储 -32.12%", "减免 $1.588M", "未开票 $392K"],
+      risk: ["P1 2 / P2 7", "平均关闭 4.6h", "复发率 12%", "客户影响 28 家", "超时 3 项"],
+      meeting: ["日会 12 项", "周会 8 主题", "行动完成 71%", "董事会 24 指标", "待决策 5 项"],
+      permissions: ["6 角色", "5 权限层", "敏感字段 18 个", "审计实时", "导出审批 4 次"],
+      quality: ["延迟 18s", "缺失 0.8%", "血缘 96%", "异常接口 1 个", "口径版本 v2.3"]
+    };
+
+    function sampleValueForDrill(moduleId, item, index) {
+      const values = drillSampleValues[moduleId] || drillSampleValues.global;
+      return values[index % values.length];
+    }
+
+    function comparisonNoteForModule(moduleId) {
+      const notes = {
+        finance: "附件实际 / 管报预算 / 行业平均 / 行业标杆",
+        network: "实时库容 / 未来预测 / 利润中心 / 可售容量",
+        customers: "收入 / 毛利 / SLA / 客户健康分",
+        permissions: "角色 / 数据范围 / 字段脱敏 / 审计",
+        quality: "新鲜度 / 完整性 / 口径版本 / 血缘"
+      };
+      return notes[moduleId] || "实时值 / 目标线 / 同期 / 责任人";
+    }
+
+    const alerts = [
+      ["bad", "萨瓦纳仓未来 36 小时库容预测 93%，需限制低毛利客户入库。", "仓群总监", "ETA 18:00"],
+      ["bad", "11 票清关滞留超过 12 小时，资料缺失集中在 3 个客户。", "运营总监", "ETA 16:30"],
+      ["warn", "美西 LA 仓群 14:00 截单前仍有 612 单未进入拣货波次。", "仓库经理", "ETA 15:10"],
+      ["warn", "尾程承运商 A 准时率较 7 日均值下降 2.8 个点。", "运营总监", "ETA 17:20"],
+      ["warn", "本周疑似漏计费 392K 美元，集中在增值服务和退货处理。", "财务总监", "ETA 明日"],
+      ["good", "美东 NJ 仓群退货上架 SLA 恢复到 97.5%。", "仓库经理", "已恢复"]
+    ];
+
+    const actions = [
+      ["萨瓦纳仓爆仓预案", "仓群总监", "2,400 托", "今天 18:00", "处理中", "warn"],
+      ["清关资料补齐", "运营总监", "11 票 / 3 客户", "今天 16:30", "阻塞", "bad"],
+      ["美西 LA 波次加班", "仓库经理", "612 单", "今天 15:10", "处理中", "warn"],
+      ["漏计费复核", "财务总监", "$392K", "明天 12:00", "待确认", "warn"],
+      ["流失客户挽回", "渠道总监", "17 家", "本周五", "跟进中", "good"]
+    ];
+
+    let currentRole = "ceo";
+    let currentModule = "global";
+    let currentMode = "home";
+    let tick = 0;
+
+    function fmt(value, unit) {
+      if (unit === "%") return value.toFixed(1) + "%";
+      if (unit === "M$") return "$" + value.toFixed(2) + "M";
+      if (unit === "K$") return "$" + Math.round(value) + "K";
+      if (unit === "$/单") return "$" + value.toFixed(2);
+      return Math.round(value) + unit;
+    }
+
+    function jitter(base, index, magnitude) {
+      const wave = Math.sin((tick + index * 2.3) / 4) * magnitude;
+      const pulse = Math.cos((tick + index) / 7) * magnitude * 0.45;
+      return base + wave + pulse;
+    }
+
+    function trendClass(status) {
+      return status === "good" ? "good" : status === "bad" ? "bad" : "warn";
+    }
+
+    function sparkPath(seed) {
+      const points = [];
+      for (let i = 0; i < 18; i += 1) {
+        const x = 4 + i * 5.5;
+        const y = 16 + Math.sin((tick + seed + i) / 2.4) * 7 + Math.cos((tick + i) / 4.2) * 3;
+        points.push(x + "," + Math.max(4, Math.min(25, y)).toFixed(1));
+      }
+      return points.join(" ");
+    }
+
+    function fmtSignedMoney(value) {
+      const sign = value < 0 ? "-" : "";
+      return sign + "$" + Math.abs(value).toFixed(Math.abs(value) >= 10 ? 1 : 3) + "M";
+    }
+
+    function donutGradient(items) {
+      const total = items.reduce((sum, item) => sum + Math.max(0, item[1]), 0) || 1;
+      let cursor = 0;
+      return items.map(([label, value, color]) => {
+        const start = cursor;
+        cursor += Math.max(0, value) / total * 100;
+        return `${color} ${start.toFixed(2)}% ${cursor.toFixed(2)}%`;
+      }).join(", ");
+    }
+
+    function renderHomeInsights() {
+      const brief = roleBriefs[currentRole] || roleBriefs.ceo;
+      const mix = reportData.mix;
+      const totalMix = mix.reduce((sum, item) => sum + item[1], 0) || 1;
+      const maxBridge = Math.max(...brief.bridge.map(([, value]) => Math.abs(value)), 1);
+      const warehouses = reportData.warehouseCenters.slice(0, brief.warehouseLimit);
+
+      document.getElementById("homeInsights").innerHTML = `
+        <article class="card">
+          <div class="card-head">
+            <div>
+              <h2 class="card-title">${brief.title}</h2>
+              <p class="card-subtitle">${brief.subtitle}</p>
+            </div>
+            <span class="status warn">${reportData.month}</span>
+          </div>
+          <div class="card-body">
+            <div class="brief-grid">
+              <div class="brief-panel">
+                <h3>角色关键判断</h3>
+                <p>${brief.thesis}</p>
+                <div class="brief-callouts">
+                  ${brief.callouts.map(([label, value]) => `
+                    <div class="brief-callout"><span>${label}</span><strong>${value}</strong></div>
+                  `).join("")}
+                </div>
+                <div class="fact-strip">
+                  ${companyFacts.map(([label, value]) => `<span class="fact-chip"><strong>${label}</strong> ${value}</span>`).join("")}
+                </div>
+                <p class="source-line">财务口径参考《2026年西邮管理报表5月》；作业 SLA、库容、告警为虚拟实时数据，用于原型代入。</p>
+              </div>
+              <div class="brief-panel">
+                <h3>收入结构示意</h3>
+                <div class="donut-wrap">
+                  <div class="donut" style="background: conic-gradient(${donutGradient(mix)});"></div>
+                  <div class="legend">
+                    ${mix.map(([label, value, color]) => `
+                      <div class="legend-row">
+                        <span class="legend-dot" style="background:${color}"></span>
+                        <span>${label}</span>
+                        <strong>${(value / totalMix * 100).toFixed(1)}%</strong>
+                      </div>
+                    `).join("")}
+                  </div>
+                </div>
+              </div>
+              <div class="brief-panel">
+                <h3>${currentRole === "channel" ? "产品线贡献" : "利润桥 / 影响项"}</h3>
+                <div class="waterfall">
+                  ${brief.bridge.map(([label, value]) => `
+                    <div class="waterfall-row">
+                      <span>${label}</span>
+                      <span class="waterfall-track"><span class="waterfall-fill ${value < 0 ? "neg" : ""}" style="--w:${Math.max(5, Math.abs(value) / maxBridge * 100).toFixed(1)}%"></span></span>
+                      <strong>${fmtSignedMoney(value)}</strong>
+                    </div>
+                  `).join("")}
+                </div>
+              </div>
+            </div>
+            <div class="brief-panel" style="margin-top:12px;">
+              <h3>利润中心热力示意</h3>
+              <div class="warehouse-heat">
+                ${warehouses.map((wh, index) => {
+                  const sla = Math.max(88, Math.min(99.8, jitter(wh.sla, index, 0.45)));
+                  const capacity = Math.max(55, Math.min(98, jitter(wh.capacity, index + 2, 1.6)));
+                  return `
+                    <div class="warehouse-tile ${wh.status}">
+                      <strong>${wh.code}</strong>
+                      <span>${wh.region} | 收入 $${wh.revenue.toFixed(2)}M | 利润 ${fmtSignedMoney(wh.profit)}</span>
+                      <span>SLA ${sla.toFixed(1)}% | 库容 ${capacity.toFixed(0)}%</span>
+                    </div>
+                  `;
+                }).join("")}
+              </div>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderNav() {
+      const nav = document.getElementById("navList");
+      nav.innerHTML = modules.map(([id, label, , count], i) => `
+        <button class="nav-item ${(currentMode === "module" && id === currentModule) || (currentMode === "home" && id === "global") ? "active" : ""}" data-module="${id}">
+          <span class="nav-icon">${String(i + 1).padStart(2, "0")}</span>
+          <span class="nav-label">${label}</span>
+          <span class="nav-badge">${count}</span>
+        </button>
+      `).join("");
+
+      document.querySelectorAll("[data-module]").forEach((btn) => {
+        btn.classList.toggle("active", (currentMode === "module" && btn.dataset.module === currentModule) || (currentMode === "home" && btn.dataset.module === "global"));
+        btn.onclick = () => {
+          if (btn.dataset.module === "global") {
+            currentMode = "home";
+            currentModule = "global";
+            renderAll();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            return;
+          }
+          currentMode = "module";
+          currentModule = btn.dataset.module;
+          renderNav();
+          renderModule();
+          document.getElementById("moduleView").scrollIntoView({ behavior: "smooth", block: "start" });
+        };
+      });
+    }
+
+    function renderRoles() {
+      const tabs = document.getElementById("roleTabs");
+      tabs.innerHTML = Object.entries(roles).map(([key, role]) => `
+        <button class="role-btn ${key === currentRole ? "active" : ""}" data-role="${key}">
+          <span class="role-name">${role.name}</span>
+          <span class="role-scope">${role.scope}</span>
+        </button>
+      `).join("");
+
+      tabs.querySelectorAll("[data-role]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          currentMode = "home";
+          currentRole = btn.dataset.role;
+          renderAll();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      });
+    }
+
+    function renderKpis() {
+      const role = roles[currentRole];
+      document.getElementById("pageTitle").textContent = role.title;
+      document.getElementById("pageSubtitle").textContent = role.subtitle;
+
+      document.getElementById("kpiGrid").innerHTML = role.kpis.map(([label, base, unit, status], index) => {
+        const moving = unit === "个" || unit === "单" || unit === "家" || unit === "天"
+          ? Math.max(0, jitter(base, index, base > 50 ? 7 : 1.5))
+          : jitter(base, index, unit === "M$" ? 0.05 : 0.7);
+        const trend = status === "good" ? "+1.8%" : status === "bad" ? "-2.4%" : "需关注";
+        return `
+          <article class="card kpi">
+            <div class="kpi-top">
+              <span class="kpi-label">${label}</span>
+              <span class="status ${trendClass(status)}">${status === "good" ? "绿" : status === "bad" ? "红" : "黄"}</span>
+            </div>
+            <div class="kpi-value">${fmt(moving, unit)}</div>
+            <div class="spark">
+              <svg viewBox="0 0 100 30" preserveAspectRatio="none">
+                <polyline points="${sparkPath(index * 3)}" fill="none" stroke="${status === "bad" ? "#c24130" : status === "warn" ? "#b7791f" : "#118445"}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></polyline>
+              </svg>
+            </div>
+            <div class="kpi-foot">
+              <span>对比 7 日均值</span>
+              <span class="trend ${trendClass(status)}">${trend}</span>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function renderRoleDetail() {
+      const role = roles[currentRole];
+      document.getElementById("roleQuestion").textContent = role.question;
+      document.getElementById("focusList").innerHTML = role.focus.map((item) => `
+        <li><span class="check">✓</span><span>${item}</span></li>
+      `).join("");
+      document.getElementById("rolePerms").innerHTML = role.perms.map(([title, desc]) => `
+        <div class="perm"><strong>${title}</strong><span>${desc}</span></div>
+      `).join("");
+
+      document.getElementById("barList").innerHTML = role.bars.map(([label, value], index) => {
+        const moving = Math.max(5, Math.min(99, jitter(value, index, 3)));
+        const color = moving > 90 ? "green" : moving > 75 ? "amber" : "red";
+        return `
+          <div class="bar-row">
+            <span>${label}</span>
+            <span class="bar-track"><span class="bar-fill ${color}" style="width: ${moving.toFixed(1)}%"></span></span>
+            <strong>${moving.toFixed(0)}%</strong>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderFinanceDiagnostics() {
+      return `
+        <div class="detail-section finance-diagnostics">
+          <h4>财务总监诊断框架：附件实际 × 预算 × 行业平均 × 标杆</h4>
+          <div class="diagnostic-grid">
+            ${financeDiagnostics.cards.map(([title, desc]) => `
+              <div class="diagnostic-card"><strong>${title}</strong><span>${desc}</span></div>
+            `).join("")}
+          </div>
+          <div class="table-wrap">
+            <table class="benchmark-table">
+              <thead>
+                <tr>
+                  <th>指标</th>
+                  <th>附件实际</th>
+                  <th>管报预算</th>
+                  <th>行业平均</th>
+                  <th>行业标杆</th>
+                  <th>差距</th>
+                  <th>问题锁定</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${financeDiagnostics.rows.map(([metric, actual, budget, avg, bench, gap, issue, tone]) => `
+                  <tr>
+                    <td><strong>${metric}</strong></td>
+                    <td>${actual}</td>
+                    <td>${budget}</td>
+                    <td>${avg}</td>
+                    <td>${bench}</td>
+                    <td class="gap-${tone}">${gap}</td>
+                    <td>${issue}</td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+          </div>
+          <div class="source-link-list">
+            ${financeDiagnostics.sources.map(([label, name, url]) => `
+              <a class="source-link" href="${url}" target="_blank" rel="noopener">
+                <span>${label}</span>
+                <strong>${name}</strong>
+              </a>
+            `).join("")}
+          </div>
+          <div class="finance-note">${financeDiagnostics.note}</div>
+        </div>
+      `;
+    }
+
+    function renderModule() {
+      const match = modules.find(([id]) => id === currentModule);
+      const title = match ? match[1] : currentModule === "permissions" ? "角色与权限" : "数据质量";
+      const subtitle = match ? match[2] : currentModule === "permissions" ? "页面级、指标级、字段级和动作级权限" : "接口延迟、字段完整性、指标血缘和同步状态";
+      const detail = moduleDetails[currentModule] || moduleDetails.global;
+      const tree = pageArchitecture[currentModule] || pageArchitecture.global;
+      const perspectives = modulePerspectives[currentModule] || modulePerspectives.global;
+      document.getElementById("moduleView").classList.toggle("active", currentMode === "module");
+      document.getElementById("moduleTitle").textContent = title;
+      document.getElementById("moduleSubtitle").textContent = subtitle;
+      const count = (moduleCards[currentModule] || []).length;
+      document.getElementById("moduleBadge").textContent = count + " 个模块";
+      document.getElementById("moduleCards").innerHTML = (moduleCards[currentModule] || []).map(([titleText, desc, value]) => `
+        <div class="module-card">
+          <div>
+            <h3>${titleText}</h3>
+            <p>${desc}</p>
+          </div>
+          <div class="small-number">
+            <span>当前值</span>
+            <strong>${value}</strong>
+          </div>
+        </div>
+      `).join("");
+      document.getElementById("moduleDetail").innerHTML = `
+        <div class="detail-header">
+          <div>
+            <h3>${detail.headline}</h3>
+            <p>${detail.desc}</p>
+          </div>
+          <div class="detail-tags">
+            ${detail.tags.map((tag) => `<span class="detail-tag">${tag}</span>`).join("")}
+          </div>
+        </div>
+        <div class="metric-strip">
+          ${detail.metrics.map(([label, value]) => `
+            <div class="metric-tile"><span>${label}</span><strong>${value}</strong></div>
+          `).join("")}
+        </div>
+        <div class="detail-grid">
+          <div class="detail-section">
+            <h4>二级页面</h4>
+            <ul class="page-list">
+              ${detail.pages.map(([label, desc]) => `<li><strong>${label}</strong><span>${desc}</span></li>`).join("")}
+            </ul>
+          </div>
+          <div class="detail-section">
+            <h4>行动清单</h4>
+            <ul class="action-list">
+            ${detail.actions.map(([label, desc]) => `<li><strong>${label}</strong><span>${desc}</span></li>`).join("")}
+            </ul>
+          </div>
+        </div>
+        ${currentModule === "finance" ? renderFinanceDiagnostics() : ""}
+        <div class="detail-section">
+          <h4>二/三级页面树</h4>
+          <div class="page-tree">
+            ${tree.map((node) => `
+              <div class="tree-card">
+                <div class="tree-head">
+                  <strong>${node.page}</strong>
+                  <span>${node.owner}</span>
+                </div>
+                <div class="tree-body">
+                  <div class="lens-strip">
+                    ${perspectives.map(([role, lens]) => `<span class="lens-chip"><strong>${role}</strong>${lens}</span>`).join("")}
+                  </div>
+                  <ul class="drill-list">
+                    ${node.drills.map((item, index) => `
+                      <li>
+                        <span class="drill-index">${index + 1}</span>
+                        <span class="drill-content">
+                          <span class="drill-title">${item}</span>
+                          <em class="drill-metric">${sampleValueForDrill(currentModule, item, index)}</em>
+                        </span>
+                      </li>
+                    `).join("")}
+                  </ul>
+                  <div class="tree-meta">
+                    <div><strong>图形</strong><br>${node.chart}</div>
+                    <div><strong>动作</strong><br>${node.action}</div>
+                    <div><strong>对比</strong><br>${comparisonNoteForModule(currentModule)}</div>
+                  </div>
+                </div>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+        <div class="detail-section">
+          <h4>实时数据链路</h4>
+          <div class="flow-line">
+            ${detail.flow.map(([label, desc]) => `<div class="flow-step"><strong>${label}</strong><span>${desc}</span></div>`).join("")}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderMapStats() {
+      const values = [
+        ["今日出库", Math.round(jitter(28436, 1, 740)).toLocaleString("en-US") + " 单"],
+        ["在途柜量", Math.round(jitter(126, 2, 5)) + " 柜"],
+        ["清关查验率", Math.max(1, jitter(4.6, 3, 0.6)).toFixed(1) + "%"],
+        ["库容利用", Math.max(40, jitter(84.2, 4, 1.8)).toFixed(1) + "%"],
+        ["尾程准时", Math.max(80, jitter(96.8, 5, 0.7)).toFixed(1) + "%"],
+        ["未开票", "$" + Math.round(jitter(392, 6, 18)) + "K"]
+      ];
+      document.getElementById("mapStats").innerHTML = values.map(([label, value]) => `
+        <div class="mini-stat"><span>${label}</span><strong>${value}</strong></div>
+      `).join("");
+
+      document.getElementById("laNode").textContent = "库容 " + Math.max(82, jitter(88, 2, 1.6)).toFixed(0) + "% / 大件出库 96%";
+      document.getElementById("njNode").textContent = "库容 " + Math.max(70, jitter(74, 3, 1.2)).toFixed(0) + "% / 尾程准时 98%";
+      document.getElementById("savNode").textContent = "库容 " + Math.max(88, jitter(91, 4, 1.3)).toFixed(0) + "% / 清关滞留";
+    }
+
+    function renderAlerts() {
+      const rotated = alerts.slice(tick % alerts.length).concat(alerts.slice(0, tick % alerts.length));
+      document.getElementById("alertFeed").innerHTML = rotated.map(([status, title, owner, eta]) => `
+        <div class="feed-item">
+          <span class="feed-mark ${status}"></span>
+          <div>
+            <div class="feed-title">${title}</div>
+            <div class="feed-meta"><span>${owner}</span><span>${eta}</span><span>${status === "bad" ? "P1" : status === "warn" ? "P2" : "恢复"}</span></div>
+          </div>
+        </div>
+      `).join("");
+      document.getElementById("alertCount").textContent = "P1 " + (2 + (tick % 3 === 0 ? 1 : 0));
+    }
+
+    function renderActions() {
+      document.getElementById("actionRows").innerHTML = actions.map(([name, owner, impact, eta, status, tone]) => `
+        <tr>
+          <td>${name}</td>
+          <td>${owner}</td>
+          <td>${impact}</td>
+          <td>${eta}</td>
+          <td><span class="status ${tone}">${status}</span></td>
+        </tr>
+      `).join("");
+    }
+
+    function updateClock() {
+      const now = new Date();
+      document.getElementById("clock").textContent = now.toLocaleTimeString("zh-CN", { hour12: false });
+      document.getElementById("latency").textContent = Math.max(6, Math.round(jitter(18, 2, 6))) + "s";
+    }
+
+    function renderAll() {
+      renderRoles();
+      renderKpis();
+      renderHomeInsights();
+      renderRoleDetail();
+      renderModule();
+      renderMapStats();
+      renderAlerts();
+      renderActions();
+      updateClock();
+    }
+
+    renderNav();
+    renderAll();
+
+    setInterval(() => {
+      tick += 1;
+      renderKpis();
+      renderHomeInsights();
+      renderRoleDetail();
+      renderMapStats();
+      renderAlerts();
+      updateClock();
+    }, 3000);
+
+    setInterval(updateClock, 1000);
+  </script>
+</body>
+</html>
